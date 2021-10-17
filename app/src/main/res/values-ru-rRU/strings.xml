@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ip</string>
+    <string name="no_internet_is_available">Нет интернета</string>>
+    <string name="uzbek">O\'zbek</string>
+    <string name="uzbekc">Ўзбек</string>
+    <string name="english">English</string>
+    <string name="russian">Русский</string>
+    <string name="splash_title">Complex Programmer</string>
+    <string name="splash_subtitle">complexprogrammer.uz</string>
+    <string name="language">Язык</string>
+    <string name="about">о нас</string>
+    <string name="telegram">Telegram</string>>
+    <string name="current_time">Текущее время</string>
+    <string name="sum">Сумма</string>
+    <string name="version">Версия %s</string>
+    <string name="send_me_bugs">Если вы столкнетесь с ошибкой, не стесняйтесь обращаться ко мне по электронной почте.</string>
+    <string name="site_url">http://complexprogrammer.uz:4444</string>
+    <string name="email">complexprogrammer@mail.ru</string>
+    <string name="developer_label">Разработчик</string>
+    <string name="developer">Odiljon Gaybullaev</string>
+    <string name="back">назад</string>
+    <string name="server_error">Произошла ошибка на сервере. Пожалуйста, попробуйте позже.</string>
+    <string name="ip">Айпи адрес</string>
+    <string name="city">Город</string>
+    <string name="region">Область</string>
+    <string name="country">Страна</string>
+    <string name="in_eu">Европейский Союз</string>
+    <string name="country_calling_code">Телефонный код</string>
+    <string name="currency">Валюта</string>
+    <string name="languages">Языки</string>
+    <string name="asn">ASN</string>
+    <string name="org">Org</string>
+    <string name="ip_lookup">Поиск IP</string>
+</resources>

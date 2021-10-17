@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">ip</string>
+    <string name="no_internet_is_available">No internet is available</string>>
+    <string name="uzbek">O\'zbek</string>
+    <string name="uzbekc">Ўзбек</string>
+    <string name="english">English</string>
+    <string name="russian">Русский</string>
+    <string name="splash_title">Complex Programmer</string>
+    <string name="splash_subtitle">complexprogrammer.uz</string>
+    <string name="language">Language</string>
+    <string name="about">About</string>
+    <string name="telegram">Telegram</string>>
+    <string name="current_time">current time</string>
+    <string name="sum">sum</string>
+    <string name="version">Version %s</string>
+    <string name="send_me_bugs">If you run into a bug, don\'t hesitate to contact me by e-mail.</string>
+    <string name="site_url">http://complexprogrammer.uz:4444</string>
+    <string name="email">complexprogrammer@mail.ru</string>
+    <string name="developer_label">Developer</string>
+    <string name="developer">Odiljon Gaybullaev</string>
+    <string name="back">back</string>
+    <string name="server_error">An error occurred on the server. Please try again later.</string>
+    <string name="ip">IP Address</string>
+    <string name="city">City</string>
+    <string name="region">Region</string>
+    <string name="country">Country</string>
+    <string name="in_eu">European Union</string>
+    <string name="country_calling_code">Calling Code</string>
+    <string name="currency">Currency</string>
+    <string name="languages">Languages</string>
+    <string name="asn">ASN</string>
+    <string name="org">Org</string>
+    <string name="ip_lookup">IP Lookup</string>
+</resources>
