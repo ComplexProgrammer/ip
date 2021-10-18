@@ -49,4 +49,7 @@
     <string name="latlong">latlong</string>
     <string name="utc_offset">utc_offset</string>
     <string name="currency_name">currency_name</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="map">Map</string>
+    <string name="invalid_ip">Invalid IP</string>
 </resources>

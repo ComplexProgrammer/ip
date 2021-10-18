@@ -22,8 +22,8 @@ public class _Response implements Serializable {
     private String continent_code;
     private String in_eu;
     private String postal;
-    private String latitude;
-    private String longitude;
+    private Float latitude;
+    private Float longitude;
     private String latlong;
     private String timezone;
     private String utc_offset;
@@ -185,19 +185,19 @@ public class _Response implements Serializable {
         this.postal = postal;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
 

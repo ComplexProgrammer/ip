@@ -32,9 +32,9 @@
     <string name="asn">ASN</string>
     <string name="org">Org</string>
     <string name="ip_lookup">IP qidiruvi</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
-    <string name="timezone">Time Zone</string>
+    <string name="latitude">Kenglik</string>
+    <string name="longitude">Uzunlik</string>
+    <string name="timezone">Vaqt zonasi</string>
     <string name="position">Kenglik / Uzunlik</string>
     <string name="my_ip">Mening IP</string>
     <string name="region_code">region_code</string>
@@ -46,8 +46,11 @@
     <string name="country_area">country_area</string>
     <string name="country_population">country_population</string>
     <string name="continent_code">continent_code</string>
-    <string name="postal">postal</string>
+    <string name="postal">pochta</string>
     <string name="latlong">latlong</string>
     <string name="utc_offset">utc_offset</string>
     <string name="currency_name">currency_name</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="map">Xarita</string>
+    <string name="invalid_ip">Noto\'g\'ri IP</string>
 </resources>

@@ -36,8 +36,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
+    String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
+            country_code_text,country_code_iso3_text,country_name_text,country_capital_text,country_tld_text,country_area_text,
+            country_population_text,continent_code_text,in_eu_text,postal_text,latlong_text,
+            timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
+            asn_text,org_text;
+    Float latitude_text,longitude_text;
+    TableRow reason_tab;
+    TextView reason;
     EditText _ip;
-    Button ip_lookup,my_ip;
+    Button ip_lookup,my_ip,map;
     private _Response ResponseList=new _Response();
     private static final String IPV4_PATTERN =
             "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
@@ -55,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         _ip=findViewById(R.id._ip);
         ip_lookup=findViewById(R.id.ip_lookup);
         my_ip=findViewById(R.id.my_ip);
+        map=findViewById(R.id.map);
+        reason_tab=findViewById(R.id.reason_tab);
+        reason=findViewById(R.id.reason);
 
         boolean status = NetworkUtil.getConnectivityStatusString(this);
         if(!status){
@@ -70,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
                         LoadData(ip2);
                     }
                     else {
-
+                        reason.setText(getString(R.string.invalid_ip));
+                        reason_tab.setVisibility(View.VISIBLE);
                     }
                     Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
                 }
@@ -79,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     LoadData("");
+                }
+            });
+            map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putFloat("latitude_text", latitude_text);
+                    bundle.putFloat("longitude_text", longitude_text);
+                    startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                 }
             });
         }
@@ -98,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.e("code",response.code()+"");
                     Log.e("response",response+"");
 
-                    TableRow reason_tab=findViewById(R.id.reason_tab);
                     TableRow city_tab=findViewById(R.id.city_tab);
                     TableRow region_tab=findViewById(R.id.region_tab);
                     TableRow country_tab=findViewById(R.id.country_tab);
@@ -114,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                     ResponseList =response.body();
                     ImageView country_flag = findViewById(R.id.country_flag);
                     TextView ip=findViewById(R.id.ip);
-                    TextView reason=findViewById(R.id.reason);
                     TextView city=findViewById(R.id.city) ;
                     TextView region=findViewById(R.id.region);
                     TextView region_code=findViewById(R.id.region_code);
@@ -164,20 +183,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
                         reason_tab.setVisibility(View.GONE);
-                        in_eu_tab.setVisibility(View.VISIBLE);
-                        position_tab.setVisibility(View.VISIBLE);
-                        longitude_tab.setVisibility(View.VISIBLE);
-                        timezone_tab.setVisibility(View.VISIBLE);
-                        country_calling_code_tab.setVisibility(View.VISIBLE);
-                        currency_tab.setVisibility(View.VISIBLE);
-                        languages_tab.setVisibility(View.VISIBLE);
-                        asn_tab.setVisibility(View.VISIBLE);
-                        org_tab.setVisibility(View.VISIBLE);
-                        String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
-                                country_code_text,country_code_iso3_text,country_name_text,country_capital_text,country_tld_text,country_area_text,
-                                country_population_text,continent_code_text,in_eu_text,postal_text,latitude_text,longitude_text,latlong_text,
-                                timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
-                                asn_text,org_text;
+
+
                         city_text=ResponseList.getCity();
                         region_text=ResponseList.getRegion();
                         region_code_text=ResponseList.getRegion_code();
@@ -218,17 +225,19 @@ public class MainActivity extends AppCompatActivity {
                             region_tab.setVisibility(View.VISIBLE);
                         }
                         if(region_code_text==null){
-                            country_tab.setVisibility(View.GONE);
+
                         }
                         else {
                             region_code.setText(region_code_text);
-                            country_tab.setVisibility(View.VISIBLE);
+
 
                         }
                         if(country_text==null){
+                            country_tab.setVisibility(View.GONE);
                         }
                         else {
                             country.setText(country_text);
+                            country_tab.setVisibility(View.VISIBLE);
                         }
                         if(country_code_text==null){
 
@@ -279,9 +288,10 @@ public class MainActivity extends AppCompatActivity {
                             continent_code.setText(continent_code_text);
                         }
                         if(in_eu_text==null){
-
+                            in_eu_tab.setVisibility(View.GONE);
                         }
                         else {
+                            in_eu_tab.setVisibility(View.VISIBLE);
                             in_eu.setText(in_eu_text);
                         }
                         if(postal_text==null){
@@ -291,16 +301,19 @@ public class MainActivity extends AppCompatActivity {
                             postal.setText(postal_text);
                         }
                         if(latitude_text==null){
+                            position_tab.setVisibility(View.GONE);
 
                         }
                         else {
+                            position_tab.setVisibility(View.VISIBLE);
                             latitude.setText(latitude_text+" / "+longitude_text);
                         }
                         if(longitude_text==null){
-
+                            longitude_tab.setVisibility(View.GONE);
                         }
                         else {
-                            longitude.setText(longitude_text);
+                            longitude_tab.setVisibility(View.GONE);
+                            longitude.setText(longitude_text+"");
                         }
                         if(latlong_text==null){
 
@@ -309,9 +322,10 @@ public class MainActivity extends AppCompatActivity {
                             latlong.setText(latlong_text);
                         }
                         if(timezone_text==null){
-
+                            timezone_tab.setVisibility(View.GONE);
                         }
                         else {
+                            timezone_tab.setVisibility(View.VISIBLE);
                             timezone.setText(timezone_text+" ("+utc_offset_text+")");
                         }
                         if(utc_offset_text==null){
@@ -321,15 +335,17 @@ public class MainActivity extends AppCompatActivity {
                             utc_offset.setText(utc_offset_text);
                         }
                         if(country_calling_code_text==null){
-
+                            country_calling_code_tab.setVisibility(View.GONE);
                         }
                         else {
+                            country_calling_code_tab.setVisibility(View.VISIBLE);
                             country_calling_code.setText(country_calling_code_text);
                         }
                         if(currency_text==null){
-
+                            currency_tab.setVisibility(View.GONE);
                         }
                         else {
+                            currency_tab.setVisibility(View.VISIBLE);
                             currency.setText(currency_text);
                         }
                         if(currency_name_text==null){
@@ -339,21 +355,24 @@ public class MainActivity extends AppCompatActivity {
                             currency_name.setText(currency_name_text);
                         }
                         if(languages_text==null){
-
+                            languages_tab.setVisibility(View.GONE);
                         }
                         else {
+                            languages_tab.setVisibility(View.VISIBLE);
                             languages.setText(languages_text);
                         }
                         if(asn_text==null){
-
+                            asn_tab.setVisibility(View.GONE);
                         }
                         else {
+                            asn_tab.setVisibility(View.VISIBLE);
                             asn.setText(asn_text);
                         }
                         if(org_text==null){
-
+                            org_tab.setVisibility(View.GONE);
                         }
                         else {
+                            org_tab.setVisibility(View.VISIBLE);
                             org.setText(org_text);
                         }
                         String country_flag_url = "https://ipapi.co/static/images/flags/"+ResponseList.getCountry_code().toLowerCase(Locale.ROOT)+".png";
