@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class _Response implements Serializable {
     private String ip;
+    private String error;
+    private String reason;
+    private String reserved;
+    private String version;
     private String city;
     private String region;
     private String region_code;
@@ -36,6 +40,38 @@ public class _Response implements Serializable {
     public void setIp(String ip) {
         this.ip = ip;
     }
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(String reserved) {
+        this.reserved = reserved;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
 
     public String getCity() {
         return city;

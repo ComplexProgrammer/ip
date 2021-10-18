@@ -32,6 +32,11 @@
                 <Button
                     android:id="@+id/ip_lookup"
                     android:text="@string/ip_lookup"/>
+                <Button
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/my_ip"
+                    android:text="@string/my_ip"/>
+
             </TableRow>
         </TableLayout>
     </androidx.cardview.widget.CardView>
@@ -40,9 +45,6 @@
         android:layout_below="@+id/CardView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,13 +52,13 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
-
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp">
-
                 <TableRow
+                    android:id="@+id/reason_tab"
+                    android:visibility="gone"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp"
                     >
@@ -65,8 +67,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="0"
-                        android:text="@string/ip" />
+                         />
 
+                    <TextView
+                        android:textSize="16dp"
+                        android:textColor="@color/Red"
+                        android:id="@+id/reason"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_weight="1" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/ip_tab"
+                    android:background="#f0f0f0"
+                    android:layout_margin="1dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="@string/ip" />
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        />
                     <TextView
                         android:id="@+id/ip"
                         android:layout_width="0dp"
@@ -74,8 +100,9 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
-                <TableRow android:background="#f0f0f0"
+                <TableRow
+                    android:id="@+id/city_tab"
+                    android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
                     <TextView
@@ -91,8 +118,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/region_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -109,8 +136,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/country_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -123,7 +150,7 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                         />
+                        />
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -156,8 +183,8 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/in_eu_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -174,8 +201,65 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/position_tab"
+                    android:background="#f0f0f0"
+                    android:layout_margin="1dp"
+                    >
+
+                    <TextView
+                        android:layout_column="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/position" />
+
+                    <TextView
+                        android:layout_column="2"
+                        android:id="@+id/latitude"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/longitude_tab"
+                    android:visibility="gone"
+                    android:background="#f0f0f0"
+                    android:layout_margin="1dp">
+
+                    <TextView
+                        android:layout_column="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/longitude" />
+
+                    <TextView
+                        android:layout_column="2"
+                        android:id="@+id/longitude"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/timezone_tab"
+                    android:background="#f0f0f0"
+                    android:layout_margin="1dp"
+                    >
+
+                    <TextView
+                        android:layout_column="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/timezone" />
+
+                    <TextView
+                        android:layout_column="2"
+                        android:id="@+id/timezone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/country_calling_code_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -192,8 +276,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/currency_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -210,8 +294,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/languages_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -228,8 +312,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/asn_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -246,8 +330,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <TableRow
+                    android:id="@+id/org_tab"
                     android:background="#f0f0f0"
                     android:layout_margin="1dp">
 
@@ -264,8 +348,8 @@
                         android:layout_column="2"
                         android:layout_weight="1" />
                 </TableRow>
-
                 <LinearLayout
+                    android:id="@+id/region_code_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -275,7 +359,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="region_code : " />
+                        android:text="@string/region_code" />
 
                     <TextView
                         android:id="@+id/region_code"
@@ -283,8 +367,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_code_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -294,7 +378,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_code : " />
+                        android:text="@string/country_code" />
 
                     <TextView
                         android:id="@+id/country_code"
@@ -302,8 +386,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_code_iso3_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -313,7 +397,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_code_iso3 : " />
+                        android:text="@string/country_code_iso3" />
 
                     <TextView
                         android:id="@+id/country_code_iso3"
@@ -321,8 +405,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_name_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -332,11 +416,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_name : " />
+                        android:text="@string/country_name" />
 
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_capital_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -346,7 +430,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_capital : " />
+                        android:text="@string/country_capital" />
 
                     <TextView
                         android:id="@+id/country_capital"
@@ -354,8 +438,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_tld_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -365,7 +449,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_tld : " />
+                        android:text="@string/country_tld" />
 
                     <TextView
                         android:id="@+id/country_tld"
@@ -373,8 +457,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_area_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -384,7 +468,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_area : " />
+                        android:text="@string/country_area" />
 
                     <TextView
                         android:id="@+id/country_area"
@@ -392,8 +476,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/country_population_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -403,7 +487,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="country_population : " />
+                        android:text="@string/country_population" />
 
                     <TextView
                         android:id="@+id/country_population"
@@ -411,8 +495,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/continent_code_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -422,7 +506,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="continent_code : " />
+                        android:text="@string/continent_code" />
 
                     <TextView
                         android:id="@+id/continent_code"
@@ -430,8 +514,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/postal_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -441,7 +525,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="postal : " />
+                        android:text="@string/postal" />
 
                     <TextView
                         android:id="@+id/postal"
@@ -449,8 +533,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/latlong_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -460,45 +544,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="latitude : " />
-
-                    <TextView
-                        android:id="@+id/latitude"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="longitude : " />
-
-                    <TextView
-                        android:id="@+id/longitude"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="latlong : " />
+                        android:text="@string/latlong" />
 
                     <TextView
                         android:id="@+id/latlong"
@@ -506,8 +552,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/utc_offset_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -517,26 +563,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="timezone : " />
-
-                    <TextView
-                        android:id="@+id/timezone"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="utc_offset : " />
+                        android:text="@string/utc_offset" />
 
                     <TextView
                         android:id="@+id/utc_offset"
@@ -544,8 +571,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
                 </LinearLayout>
-
                 <LinearLayout
+                    android:id="@+id/currency_name_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -555,7 +582,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="currency_name : " />
+                        android:text="@string/currency_name" />
 
                     <TextView
                         android:id="@+id/currency_name"

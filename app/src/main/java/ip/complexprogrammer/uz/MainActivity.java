@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +37,8 @@ import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
     EditText _ip;
-    Button ip_lookup;
+    Button ip_lookup,my_ip;
     private _Response ResponseList=new _Response();
-    private static final String IP_PATTERN =
-            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String IPV4_PATTERN =
             "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
     private static final Pattern pattern = Pattern.compile(IPV4_PATTERN);
@@ -55,40 +54,68 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         _ip=findViewById(R.id._ip);
         ip_lookup=findViewById(R.id.ip_lookup);
+        my_ip=findViewById(R.id.my_ip);
 
         boolean status = NetworkUtil.getConnectivityStatusString(this);
         if(!status){
             startActivity(new Intent(this, NoInternetActivity.class));
         }
         else {
-            LoadData();
+            LoadData("");
             ip_lookup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Log.e("_ip",_ip.getText().toString());
-                    if(isValid(_ip.getText().toString())){
-                        Log.e("_ip","Yes");
+                    String ip2=_ip.getText().toString();
+                    if(isValid(ip2)){
+                        LoadData(ip2);
                     }
                     else {
-                        Log.e("_ip","No");
+
                     }
-                    Toast.makeText(MainActivity.this,_ip.getText(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
+                }
+            });
+            my_ip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoadData("");
                 }
             });
         }
     }
-    public void LoadData(){
-        Call<_Response> _response = ApiClient.getInterface().GetMyIpData();
-
+    public void LoadData(String ip){
+        Call<_Response> _response=null;
+        if(ip.equals("")){
+            _response = ApiClient.getInterface().GetMyIpData();
+        }
+        else {
+            _response = ApiClient.getInterface().GetCustomerIp(ip);
+        }
         _response.enqueue(new Callback<_Response>() {
             @Override
             public void onResponse(Call<_Response> call, retrofit2.Response<_Response> response) {
                 if(response.isSuccessful()){
+//                    Log.e("code",response.code()+"");
+                    Log.e("response",response+"");
+
+                    TableRow reason_tab=findViewById(R.id.reason_tab);
+                    TableRow city_tab=findViewById(R.id.city_tab);
+                    TableRow region_tab=findViewById(R.id.region_tab);
+                    TableRow country_tab=findViewById(R.id.country_tab);
+                    TableRow in_eu_tab=findViewById(R.id.in_eu_tab);
+                    TableRow position_tab=findViewById(R.id.position_tab);
+                    TableRow longitude_tab=findViewById(R.id.longitude_tab);
+                    TableRow timezone_tab=findViewById(R.id.timezone_tab);
+                    TableRow country_calling_code_tab=findViewById(R.id.country_calling_code_tab);
+                    TableRow currency_tab=findViewById(R.id.currency_tab);
+                    TableRow languages_tab=findViewById(R.id.languages_tab);
+                    TableRow asn_tab=findViewById(R.id.asn_tab);
+                    TableRow org_tab=findViewById(R.id.org_tab);
                     ResponseList =response.body();
                     ImageView country_flag = findViewById(R.id.country_flag);
                     TextView ip=findViewById(R.id.ip);
-                    TextView city=findViewById(R.id.city);
+                    TextView reason=findViewById(R.id.reason);
+                    TextView city=findViewById(R.id.city) ;
                     TextView region=findViewById(R.id.region);
                     TextView region_code=findViewById(R.id.region_code);
                     TextView country=findViewById(R.id.country);
@@ -115,35 +142,224 @@ public class MainActivity extends AppCompatActivity {
                     TextView org=findViewById(R.id.org);
 
                     ip.setText(ResponseList.getIp());
-                    city.setText(ResponseList.getCity());
-                    region.setText(ResponseList.getRegion());
-                    region_code.setText(ResponseList.getRegion_code());
-                    country.setText(ResponseList.getCountry());
-                    country_code.setText(ResponseList.getCountry_code());
-                    country_code_iso3.setText(ResponseList.getCountry_code_iso3());
-                    country_name.setText(ResponseList.getCountry_name());
-                    country_capital.setText(ResponseList.getCountry_capital());
-                    country_tld.setText(ResponseList.getCountry_tld());
-                    country_area.setText(ResponseList.getCountry_area());
-                    country_population.setText(ResponseList.getCountry_population());
-                    continent_code.setText(ResponseList.getContinent_code());
-                    in_eu.setText(ResponseList.getIn_eu());
-                    postal.setText(ResponseList.getPostal());
-                    latitude.setText(ResponseList.getLatitude());
-                    longitude.setText(ResponseList.getLongitude());
-                    latlong.setText(ResponseList.getLatlong());
-                    timezone.setText(ResponseList.getTimezone());
-                    utc_offset.setText(ResponseList.getUtc_offset());
-                    country_calling_code.setText(ResponseList.getCountry_calling_code());
-                    currency.setText(ResponseList.getCurrency());
-                    currency_name.setText(ResponseList.getCurrency_name());
-                    languages.setText(ResponseList.getLanguages());
-                    asn.setText(ResponseList.getAsn());
-                    org.setText(ResponseList.getOrg());
-                    String country_flag_url = "https://ipapi.co/static/images/flags/"+ResponseList.getCountry_code().toLowerCase(Locale.ROOT)+".png";
-                    Glide.with(MainActivity.this).load(country_flag_url).into(country_flag);
-                    //Utils.fetchSvg(MainActivity.this, country_flag_url, country_flag);
+                    _ip.setText(ResponseList.getIp()) ;
+                    reason.setText(ResponseList.getReason());
+                    Log.e("getReason",ResponseList.getReason()+"");
+                    Log.e("reasongetText()",reason.getText()+"");
 
+                    if(ResponseList.getReason() != null){
+                        reason_tab.setVisibility(View.VISIBLE);
+                        city_tab.setVisibility(View.GONE);
+                        region_tab.setVisibility(View.GONE);
+                        country_tab.setVisibility(View.GONE);
+                        in_eu_tab.setVisibility(View.GONE);
+                        position_tab.setVisibility(View.GONE);
+                        longitude_tab.setVisibility(View.GONE);
+                        timezone_tab.setVisibility(View.GONE);
+                        country_calling_code_tab.setVisibility(View.GONE);
+                        currency_tab.setVisibility(View.GONE);
+                        languages_tab.setVisibility(View.GONE);
+                        asn_tab.setVisibility(View.GONE);
+                        org_tab.setVisibility(View.GONE);
+                    }
+                    else {
+                        reason_tab.setVisibility(View.GONE);
+                        in_eu_tab.setVisibility(View.VISIBLE);
+                        position_tab.setVisibility(View.VISIBLE);
+                        longitude_tab.setVisibility(View.VISIBLE);
+                        timezone_tab.setVisibility(View.VISIBLE);
+                        country_calling_code_tab.setVisibility(View.VISIBLE);
+                        currency_tab.setVisibility(View.VISIBLE);
+                        languages_tab.setVisibility(View.VISIBLE);
+                        asn_tab.setVisibility(View.VISIBLE);
+                        org_tab.setVisibility(View.VISIBLE);
+                        String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
+                                country_code_text,country_code_iso3_text,country_name_text,country_capital_text,country_tld_text,country_area_text,
+                                country_population_text,continent_code_text,in_eu_text,postal_text,latitude_text,longitude_text,latlong_text,
+                                timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
+                                asn_text,org_text;
+                        city_text=ResponseList.getCity();
+                        region_text=ResponseList.getRegion();
+                        region_code_text=ResponseList.getRegion_code();
+                        country_text=ResponseList.getCountry();
+                        country_code_text=ResponseList.getCountry_code();
+                        country_code_iso3_text=ResponseList.getCountry_code_iso3();
+                        country_name_text=ResponseList.getCountry_name();
+                        country_capital_text=ResponseList.getCountry_capital();
+                        country_tld_text=ResponseList.getCountry_tld();
+                        country_area_text=ResponseList.getCountry_area();
+                        country_population_text=ResponseList.getCountry_population();
+                        continent_code_text=ResponseList.getContinent_code();
+                        in_eu_text=ResponseList.getIn_eu();
+                        postal_text=ResponseList.getPostal();
+                        latitude_text=ResponseList.getLatitude();
+                        longitude_text=ResponseList.getLongitude();
+                        latlong_text=ResponseList.getLatlong();
+                        timezone_text=ResponseList.getTimezone();
+                        utc_offset_text=ResponseList.getUtc_offset();
+                        country_calling_code_text=ResponseList.getCountry_calling_code();
+                        currency_text=ResponseList.getCurrency();
+                        currency_name_text=ResponseList.getCurrency_name();
+                        languages_text=ResponseList.getLanguages();
+                        asn_text=ResponseList.getAsn();
+                        org_text=ResponseList.getOrg();
+                        if(city_text==null){
+                            city_tab.setVisibility(View.GONE);
+                        }
+                        else {
+                            city.setText(city_text);
+                            city_tab.setVisibility(View.VISIBLE);
+                        }
+                        if(region_text==null){
+                            region_tab.setVisibility(View.GONE);
+                        }
+                        else {
+                            region.setText(region_text);
+                            region_tab.setVisibility(View.VISIBLE);
+                        }
+                        if(region_code_text==null){
+                            country_tab.setVisibility(View.GONE);
+                        }
+                        else {
+                            region_code.setText(region_code_text);
+                            country_tab.setVisibility(View.VISIBLE);
+
+                        }
+                        if(country_text==null){
+                        }
+                        else {
+                            country.setText(country_text);
+                        }
+                        if(country_code_text==null){
+
+                        }
+                        else {
+                            country_code.setText(country_code_text);
+                        }
+                        if(country_code_iso3_text==null){
+
+                        }
+                        else {
+                            country_code_iso3.setText(country_code_iso3_text);
+                        }
+                        if(country_name_text==null){
+
+                        }
+                        else {
+                            country_name.setText(country_name_text);
+                        }
+                        if(country_capital_text==null){
+
+                        }
+                        else {
+                            country_capital.setText(country_capital_text);
+                        }
+                        if(country_tld_text==null){
+
+                        }
+                        else {
+                            country_tld.setText(country_tld_text);
+                        }
+                        if(country_area_text==null){
+
+                        }
+                        else {
+                            country_area.setText(country_area_text);
+                        }
+                        if(country_population_text==null){
+
+                        }
+                        else {
+                            country_population.setText(country_population_text);
+                        }
+                        if(continent_code_text==null){
+
+                        }
+                        else {
+                            continent_code.setText(continent_code_text);
+                        }
+                        if(in_eu_text==null){
+
+                        }
+                        else {
+                            in_eu.setText(in_eu_text);
+                        }
+                        if(postal_text==null){
+
+                        }
+                        else {
+                            postal.setText(postal_text);
+                        }
+                        if(latitude_text==null){
+
+                        }
+                        else {
+                            latitude.setText(latitude_text+" / "+longitude_text);
+                        }
+                        if(longitude_text==null){
+
+                        }
+                        else {
+                            longitude.setText(longitude_text);
+                        }
+                        if(latlong_text==null){
+
+                        }
+                        else {
+                            latlong.setText(latlong_text);
+                        }
+                        if(timezone_text==null){
+
+                        }
+                        else {
+                            timezone.setText(timezone_text+" ("+utc_offset_text+")");
+                        }
+                        if(utc_offset_text==null){
+
+                        }
+                        else {
+                            utc_offset.setText(utc_offset_text);
+                        }
+                        if(country_calling_code_text==null){
+
+                        }
+                        else {
+                            country_calling_code.setText(country_calling_code_text);
+                        }
+                        if(currency_text==null){
+
+                        }
+                        else {
+                            currency.setText(currency_text);
+                        }
+                        if(currency_name_text==null){
+
+                        }
+                        else {
+                            currency_name.setText(currency_name_text);
+                        }
+                        if(languages_text==null){
+
+                        }
+                        else {
+                            languages.setText(languages_text);
+                        }
+                        if(asn_text==null){
+
+                        }
+                        else {
+                            asn.setText(asn_text);
+                        }
+                        if(org_text==null){
+
+                        }
+                        else {
+                            org.setText(org_text);
+                        }
+                        String country_flag_url = "https://ipapi.co/static/images/flags/"+ResponseList.getCountry_code().toLowerCase(Locale.ROOT)+".png";
+                        Glide.with(MainActivity.this).load(country_flag_url).into(country_flag);
+                        //Utils.fetchSvg(MainActivity.this, country_flag_url, country_flag);
+                    }
                 }
                 else if (response.errorBody() != null) {
                     // Get response errorBody

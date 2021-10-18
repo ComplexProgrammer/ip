@@ -32,4 +32,22 @@
     <string name="asn">ASN</string>
     <string name="org">Org</string>
     <string name="ip_lookup">Поиск IP</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="timezone">Time Zone</string>
+    <string name="position">Широта / Долгота</string>
+    <string name="my_ip">Мой IP</string>
+    <string name="region_code">region_code</string>
+    <string name="country_code">country_code</string>
+    <string name="country_code_iso3">country_code_iso3</string>
+    <string name="country_name">country_name</string>
+    <string name="country_capital">country_capital</string>
+    <string name="country_tld">country_tld</string>
+    <string name="country_area">country_area</string>
+    <string name="country_population">country_population</string>
+    <string name="continent_code">continent_code</string>
+    <string name="postal">postal</string>
+    <string name="latlong">latlong</string>
+    <string name="utc_offset">utc_offset</string>
+    <string name="currency_name">currency_name</string>
 </resources>
