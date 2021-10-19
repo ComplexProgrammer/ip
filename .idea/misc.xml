@@ -3,12 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable-v24/blue_button.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable-v24/green_button.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable-v24/red_button.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable-v24/yellow_button.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/ic_baseline_find_replace_24.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/ic_baseline_keyboard_backspace_24.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/ic_baseline_map_24.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/ic_baseline_my_location_24.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/spinner_bg.xml" value="0.24427083333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/drawable/spinner_sla.xml" value="0.24427083333333333" />
         <entry key="..\:/AndroidStudio/ip/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
+        <entry key="..\:/AndroidStudio/ip/app/src/main/res/layout/activity_maps.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5574358974358974" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5574358974358974" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/about.xml" value="0.38333333333333336" />
-        <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_main.xml" value="0.5492589363557105" />
-        <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_maps.xml" value="0.328125" />
+        <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_main.xml" value="0.2391304347826087" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_no_internet.xml" value="0.55" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_server_error.xml" value="0.55" />
         <entry key="..\:/Users/odilj/AndroidStudioProjects/ip/app/src/main/res/layout/activity_splash_screen.xml" value="0.55" />

@@ -32,18 +32,31 @@
                     android:layout_column="1"
                     android:layout_weight="1" />
                 <Button
+                    android:background="@drawable/green_button"
+                    android:textColor="#ffff"
+                    android:drawableStart="@drawable/ic_baseline_find_replace_24"
                     android:id="@+id/ip_lookup"
                     android:text="@string/ip_lookup"/>
                 <Button
+                    android:background="@drawable/yellow_button"
+                    android:textColor="#ffff"
+                    android:drawableStart="@drawable/ic_baseline_my_location_24"
                     android:layout_marginStart="5dp"
                     android:id="@+id/my_ip"
                     android:text="@string/my_ip"/>
-
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:visibility="gone"
+                android:id="@+id/map_tab">
+
+
                 <Button
+                    android:background="@drawable/blue_button"
+                    android:textColor="#ffff"
+                    android:drawableStart="@drawable/ic_baseline_map_24"
                     android:layout_column="1"
                     android:layout_marginStart="5dp"
+                    android:layout_width="match_parent"
                     android:id="@+id/map"
                     android:text="@string/map"/>
             </TableRow>

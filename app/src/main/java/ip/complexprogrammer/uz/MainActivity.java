@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("response",response+"");
 
                     TableRow city_tab=findViewById(R.id.city_tab);
+                    TableRow map_tab=findViewById(R.id.map_tab);
                     TableRow region_tab=findViewById(R.id.region_tab);
                     TableRow country_tab=findViewById(R.id.country_tab);
                     TableRow in_eu_tab=findViewById(R.id.in_eu_tab);
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                         country_tab.setVisibility(View.GONE);
                         in_eu_tab.setVisibility(View.GONE);
                         position_tab.setVisibility(View.GONE);
+                        map_tab.setVisibility(View.GONE);
                         longitude_tab.setVisibility(View.GONE);
                         timezone_tab.setVisibility(View.GONE);
                         country_calling_code_tab.setVisibility(View.GONE);
@@ -302,10 +304,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         if(latitude_text==null){
                             position_tab.setVisibility(View.GONE);
+                            map_tab.setVisibility(View.GONE);
 
                         }
                         else {
                             position_tab.setVisibility(View.VISIBLE);
+                            map_tab.setVisibility(View.VISIBLE);
                             latitude.setText(latitude_text+" / "+longitude_text);
                         }
                         if(longitude_text==null){
