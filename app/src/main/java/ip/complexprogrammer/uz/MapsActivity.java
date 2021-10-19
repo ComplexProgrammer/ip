@@ -45,8 +45,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                startActivity(new Intent(MapsActivity.this, MainActivity.class));
+                onBackPressed();
+//                finish();
+//                startActivity(new Intent(MapsActivity.this, MainActivity.class));
             }
         });
         dropdown = findViewById(R.id.spinner1);
