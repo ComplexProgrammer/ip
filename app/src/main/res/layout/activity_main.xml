@@ -23,38 +23,41 @@
             android:layout_marginEnd="5dp"
             >
 
-            <TableRow>
+            <TableRow
+                android:gravity="start">
                 <EditText
                     android:id="@+id/_ip"
                     android:hint="@string/ip"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_column="1"
+                    android:layout_column="0"
                     android:layout_weight="1" />
+
                 <Button
-                    android:background="@drawable/green_button"
+                    android:background="@drawable/yellow_button"
                     android:textColor="#ffff"
                     android:drawableStart="@drawable/ic_baseline_find_replace_24"
                     android:id="@+id/ip_lookup"
                     android:text="@string/ip_lookup"/>
                 <Button
-                    android:background="@drawable/yellow_button"
+                    android:background="@drawable/green_button"
                     android:textColor="#ffff"
                     android:drawableStart="@drawable/ic_baseline_my_location_24"
                     android:layout_marginStart="5dp"
                     android:id="@+id/my_ip"
                     android:text="@string/my_ip"/>
+
             </TableRow>
             <TableRow
+                android:layout_marginTop="5dp"
+                android:gravity="end"
                 android:visibility="gone"
                 android:id="@+id/map_tab">
-
-
                 <Button
                     android:background="@drawable/blue_button"
                     android:textColor="#ffff"
                     android:drawableStart="@drawable/ic_baseline_map_24"
-                    android:layout_column="1"
+                    android:layout_column="0"
                     android:layout_marginStart="5dp"
                     android:layout_width="match_parent"
                     android:id="@+id/map"

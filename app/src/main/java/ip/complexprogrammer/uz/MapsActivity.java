@@ -102,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 // Move the camera instantly to Sydney with a zoom of 15.
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
 
 // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
