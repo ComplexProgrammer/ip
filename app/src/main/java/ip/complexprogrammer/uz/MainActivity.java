@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             country_population_text,continent_code_text,in_eu_text,postal_text,latlong_text,
             timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
             asn_text,org_text;
-    Float latitude_text,longitude_text;
+    String latitude_text,longitude_text;
     TableRow reason_tab;
     TextView reason;
     EditText _ip;
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Bundle bundle = new Bundle();
-                    bundle.putFloat("latitude_text", latitude_text);
-                    bundle.putFloat("longitude_text", longitude_text);
+                    bundle.putString("latitude_text", latitude_text);
+                    bundle.putString("longitude_text", longitude_text);
                     startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                 }
             });
@@ -296,13 +296,13 @@ public class MainActivity extends AppCompatActivity {
                             in_eu_tab.setVisibility(View.VISIBLE);
                             in_eu.setText(in_eu_text);
                         }
-                        if(postal_text==null){
+                        if(postal_text==null||postal_text.equals("Sign up to access")){
 
                         }
                         else {
                             postal.setText(postal_text);
                         }
-                        if(latitude_text==null){
+                        if(latitude_text==null||latitude_text.equals("Sign up to access")){
                             position_tab.setVisibility(View.GONE);
                             map_tab.setVisibility(View.GONE);
 
@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                             map_tab.setVisibility(View.VISIBLE);
                             latitude.setText(latitude_text+" / "+longitude_text);
                         }
-                        if(longitude_text==null){
+                        if(longitude_text==null||longitude_text.equals("Sign up to access")){
                             longitude_tab.setVisibility(View.GONE);
                         }
                         else {

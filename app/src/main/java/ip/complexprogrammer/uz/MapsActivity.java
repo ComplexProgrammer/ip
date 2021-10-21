@@ -29,15 +29,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button back;
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-    private Float latitude,longitude;
+    private String latitude,longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {
-            latitude = bundle.getFloat("latitude_text");
-            longitude = bundle.getFloat("longitude_text");
+            latitude = bundle.getString("latitude_text");
+            longitude = bundle.getString("longitude_text");
         }
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -97,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 //        LatLng sydney = new LatLng(-33.88,151.21);
-        LatLng sydney = new LatLng(latitude, longitude);
+        LatLng sydney = new LatLng(Float.parseFloat(latitude), Float.parseFloat(longitude));
 
 
 
