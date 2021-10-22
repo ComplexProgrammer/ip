@@ -23,8 +23,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +38,7 @@ import ip.complexprogrammer.uz.services.ChangeLanguage;
 import ip.complexprogrammer.uz.services.NetworkUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
@@ -42,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
             timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
             asn_text,org_text;
     String latitude_text,longitude_text;
-    TableRow reason_tab;
-    TextView reason;
+    TableRow reason_tab,city_tab,map_tab,region_tab,country_tab,in_eu_tab,position_tab,longitude_tab,timezone_tab,country_calling_code_tab,currency_tab,languages_tab,asn_tab,org_tab;
+    TextView reason,ip;
     EditText _ip;
     Button ip_lookup,my_ip,map;
     private _Response ResponseList=new _Response();
@@ -60,13 +65,32 @@ public class MainActivity extends AppCompatActivity {
         ChangeLanguage.setLocal(this,ChangeLanguage.getLangCode(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
         _ip=findViewById(R.id._ip);
         ip_lookup=findViewById(R.id.ip_lookup);
         my_ip=findViewById(R.id.my_ip);
         map=findViewById(R.id.map);
+        ip=findViewById(R.id.ip);
         reason_tab=findViewById(R.id.reason_tab);
         reason=findViewById(R.id.reason);
-
+        city_tab=findViewById(R.id.city_tab);
+        map_tab=findViewById(R.id.map_tab);
+        region_tab=findViewById(R.id.region_tab);
+        country_tab=findViewById(R.id.country_tab);
+        in_eu_tab=findViewById(R.id.in_eu_tab);
+        position_tab=findViewById(R.id.position_tab);
+        longitude_tab=findViewById(R.id.longitude_tab);
+        timezone_tab=findViewById(R.id.timezone_tab);
+        country_calling_code_tab=findViewById(R.id.country_calling_code_tab);
+        currency_tab=findViewById(R.id.currency_tab);
+        languages_tab=findViewById(R.id.languages_tab);
+        asn_tab=findViewById(R.id.asn_tab);
+        org_tab=findViewById(R.id.org_tab);
         boolean status = NetworkUtil.getConnectivityStatusString(this);
         if(!status){
             startActivity(new Intent(this, NoInternetActivity.class));
@@ -82,7 +106,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
                         reason.setText(getString(R.string.invalid_ip));
+                        ip.setText(ip2);
                         reason_tab.setVisibility(View.VISIBLE);
+                        city_tab.setVisibility(View.GONE);
+                        region_tab.setVisibility(View.GONE);
+                        country_tab.setVisibility(View.GONE);
+                        in_eu_tab.setVisibility(View.GONE);
+                        position_tab.setVisibility(View.GONE);
+                        map_tab.setVisibility(View.GONE);
+                        longitude_tab.setVisibility(View.GONE);
+                        timezone_tab.setVisibility(View.GONE);
+                        country_calling_code_tab.setVisibility(View.GONE);
+                        currency_tab.setVisibility(View.GONE);
+                        languages_tab.setVisibility(View.GONE);
+                        asn_tab.setVisibility(View.GONE);
+                        org_tab.setVisibility(View.GONE);
                     }
                     Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
                 }
@@ -104,37 +142,24 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-    public void LoadData(String ip){
+    public void LoadData(String ip_address){
         Call<_Response> _response=null;
-        if(ip.equals("")){
+        if(ip_address.equals("")){
             _response = ApiClient.getInterface().GetMyIpData();
         }
         else {
-            _response = ApiClient.getInterface().GetCustomerIp(ip);
+            _response = ApiClient.getInterface().GetCustomerIp(ip_address);
         }
         _response.enqueue(new Callback<_Response>() {
             @Override
-            public void onResponse(Call<_Response> call, retrofit2.Response<_Response> response) {
+            public void onResponse(Call<_Response> call, Response<_Response> response) {
                 if(response.isSuccessful()){
 //                    Log.e("code",response.code()+"");
                     Log.e("response",response+"");
 
-                    TableRow city_tab=findViewById(R.id.city_tab);
-                    TableRow map_tab=findViewById(R.id.map_tab);
-                    TableRow region_tab=findViewById(R.id.region_tab);
-                    TableRow country_tab=findViewById(R.id.country_tab);
-                    TableRow in_eu_tab=findViewById(R.id.in_eu_tab);
-                    TableRow position_tab=findViewById(R.id.position_tab);
-                    TableRow longitude_tab=findViewById(R.id.longitude_tab);
-                    TableRow timezone_tab=findViewById(R.id.timezone_tab);
-                    TableRow country_calling_code_tab=findViewById(R.id.country_calling_code_tab);
-                    TableRow currency_tab=findViewById(R.id.currency_tab);
-                    TableRow languages_tab=findViewById(R.id.languages_tab);
-                    TableRow asn_tab=findViewById(R.id.asn_tab);
-                    TableRow org_tab=findViewById(R.id.org_tab);
+
                     ResponseList =response.body();
                     ImageView country_flag = findViewById(R.id.country_flag);
-                    TextView ip=findViewById(R.id.ip);
                     TextView city=findViewById(R.id.city) ;
                     TextView region=findViewById(R.id.region);
                     TextView region_code=findViewById(R.id.region_code);

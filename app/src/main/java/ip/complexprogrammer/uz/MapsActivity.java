@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.internal.LinkedHashTreeMap;
 
 import ip.complexprogrammer.uz.databinding.ActivityMapsBinding;
+import ip.complexprogrammer.uz.services.ChangeLanguage;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     Spinner dropdown;
@@ -32,6 +33,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String latitude,longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ChangeLanguage.setLocal(getBaseContext(),ChangeLanguage.getLangCode(getBaseContext()));
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Bundle bundle = getIntent().getExtras();
