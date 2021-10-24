@@ -33,12 +33,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         topAnim= AnimationUtils.loadAnimation(this,R.anim.top_animation);
         bottomAnim= AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
 
+
         logo.setAnimation(topAnim);
         title.setAnimation(bottomAnim);
         sub_title.setAnimation(bottomAnim);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Intent parchment = new Intent(SplashScreenActivity.this, MainActivity.class);
                 SplashScreenActivity.this.startActivity(parchment);
                 SplashScreenActivity.this.finish();

@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
+        //StartAppSDK.init(this, "209602699", false);
+
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -509,5 +511,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.finish();
+        //StartAppAd.onBackPressed(this);
+        super.onBackPressed();
     }
 }
