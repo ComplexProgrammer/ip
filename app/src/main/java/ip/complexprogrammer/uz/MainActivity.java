@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     TextView reason,ip;
     EditText _ip;
     Button ip_lookup,my_ip,map;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String AD_UNIT_ID = "ca-app-pub-7773722896374259/2800286177";
     private static final String TAG = "MainActivity";
     private InterstitialAd interstitialAd;
     private RewardedAd mRewardedAd;
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         AdRequest adRequest = new AdRequest.Builder().build();
 
-        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+        RewardedAd.load(this, "ca-app-pub-7773722896374259/5043306138",
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
@@ -195,8 +195,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
-        //StartAppSDK.init(this, "209602699", false);
-
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
@@ -205,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-//        loadInterstitialAd();
-        loadRewardedad();
+        loadInterstitialAd();
 
         _ip=findViewById(R.id._ip);
         ip_lookup=findViewById(R.id.ip_lookup);
@@ -271,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             map.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    loadRewardedad();
                     Bundle bundle = new Bundle();
                     bundle.putString("latitude_text", latitude_text);
                     bundle.putString("longitude_text", longitude_text);
@@ -600,10 +598,10 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater factory = LayoutInflater.from(MainActivity.this);
                 final View aboutView = factory.inflate(R.layout.about, null);
                 if(NetworkUtil.getConnectivityStatusString(getBaseContext())){
-//                    AdView mAdView = aboutView.findViewById(R.id.adView);
-//                    AdRequest adRequest = new AdRequest.Builder()
-//                            .build();
-//                    mAdView.loadAd(adRequest);
+                    AdView mAdView = aboutView.findViewById(R.id.adView);
+                    AdRequest adRequest = new AdRequest.Builder()
+                            .build();
+                    mAdView.loadAd(adRequest);
                 }
                 TextView versionLabel = aboutView.findViewById(R.id.version_label);
                 String versionName = getAppVersionName(getApplicationContext());

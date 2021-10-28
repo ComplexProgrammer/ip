@@ -10,15 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="18dp">
-<!--        <com.google.android.gms.ads.AdView-->
-<!--            xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--            android:id="@+id/adView"-->
-<!--            android:layout_width="fill_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            ads:adSize="BANNER"-->
-<!--            android:gravity="center_horizontal"-->
-<!--            ads:adUnitId="ca-app-pub-7773722896374259/6894028173">-->
-<!--        </com.google.android.gms.ads.AdView>-->
+
         <TextView
             android:id="@+id/version_label"
             android:layout_width="fill_parent"
@@ -73,6 +65,15 @@
             android:autoLink="all"
             android:gravity="center_horizontal"
             android:text="@string/developer" />
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            android:gravity="center_horizontal"
+            ads:adUnitId="ca-app-pub-7773722896374259/4466729249">
+        </com.google.android.gms.ads.AdView>
     </LinearLayout>
 
 </ScrollView>
