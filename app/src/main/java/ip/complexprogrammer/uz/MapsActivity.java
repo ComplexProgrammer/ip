@@ -20,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.internal.LinkedHashTreeMap;
 
 import ip.complexprogrammer.uz.databinding.ActivityMapsBinding;
 import ip.complexprogrammer.uz.services.ChangeLanguage;
@@ -81,8 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String value=adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(getApplicationContext(), "This is " +
-                        adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "This is " +
+//                        adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
                 Log.e("",value);
                 switch (value) {
                     case "HYBRID":        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);break;

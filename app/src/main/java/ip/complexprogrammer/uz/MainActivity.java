@@ -1,12 +1,16 @@
 package ip.complexprogrammer.uz;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +29,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -36,9 +44,13 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -48,12 +60,13 @@ import java.util.regex.Pattern;
 import ip.complexprogrammer.uz.models._Response;
 import ip.complexprogrammer.uz.services.ApiClient;
 import ip.complexprogrammer.uz.services.ChangeLanguage;
+import ip.complexprogrammer.uz.services.LoadingScreen;
 import ip.complexprogrammer.uz.services.NetworkUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnUserEarnedRewardListener{
     String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
             country_code_text,country_code_iso3_text,country_name_text,country_capital_text,country_tld_text,country_area_text,
             country_population_text,continent_code_text,in_eu_text,postal_text,latlong_text,
@@ -67,17 +80,20 @@ public class MainActivity extends AppCompatActivity {
     private static final String AD_UNIT_ID = "ca-app-pub-7773722896374259/2800286177";
     private static final String TAG = "MainActivity";
     private InterstitialAd interstitialAd;
+    private RewardedInterstitialAd rewardedInterstitialAd;
     private RewardedAd mRewardedAd;
     private _Response ResponseList=new _Response();
     private static final String IPV4_PATTERN =
             "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
     private static final Pattern pattern = Pattern.compile(IPV4_PATTERN);
+    private ImageView loadingImage;
+    private ProgressDialog dialog;
 
     public static boolean isValid(final String email) {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    public void loadInterstitialAd() {
+    public void loadInterstitialAd(String ip_address) {
         AdRequest adRequest = new AdRequest.Builder().build();
         InterstitialAd.load(
                 this,
@@ -94,9 +110,7 @@ public class MainActivity extends AppCompatActivity {
                                 new FullScreenContentCallback() {
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
-                                        // Called when fullscreen content is dismissed.
-                                        // Make sure to set your reference to null so you don't
-                                        // show it a second time.
+                                        LoadData(ip_address);
                                         MainActivity.this.interstitialAd = null;
                                         Log.d("TAG", "The ad was dismissed.");
                                     }
@@ -120,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error
+                        LoadData(ip_address);
                         Log.i(TAG, loadAdError.getMessage());
                         interstitialAd = null;
 
@@ -142,9 +156,10 @@ public class MainActivity extends AppCompatActivity {
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error.
+                        LoadData("");
                         Log.d(TAG, loadAdError.getMessage());
                         mRewardedAd = null;
+
                     }
 
                     @Override
@@ -168,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                             @Override
                             public void onAdShowedFullScreenContent() {
-                                // Called when ad is shown.
+                                LoadData("");
                                 Log.d(TAG, "Ad was shown.");
                             }
 
@@ -189,21 +204,118 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+    public void loadRewardedInterstitialAd(Bundle bundle){
+        RewardedInterstitialAd.load(MainActivity.this, "ca-app-pub-7773722896374259/8340809542",
+                new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(RewardedInterstitialAd ad) {
+                        Log.d(TAG, "Ad was loaded.");
+                        rewardedInterstitialAd = ad;
+                        rewardedInterstitialAd.show(/* Activity */ MainActivity.this,/*
+    OnUserEarnedRewardListener */ MainActivity.this);
+                        rewardedInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdClicked() {
+                                super.onAdClicked();
+                            }
+
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                super.onAdDismissedFullScreenContent();
+                                handler.removeCallbacks(myRunnable);
+                                dialog.dismiss();
+                                startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                super.onAdFailedToShowFullScreenContent(adError);
+                            }
+
+                            @Override
+                            public void onAdImpression() {
+                                super.onAdImpression();
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                                super.onAdShowedFullScreenContent();
+                            }
+                        });
+                    }
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError loadAdError) {
+                        Log.d(TAG, loadAdError.toString());
+                        rewardedInterstitialAd = null;
+                        handler.removeCallbacks(myRunnable);
+                        dialog.dismiss();
+                        startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
+                    }
+                });
+    }
+    private AdView mAdView;
+    private Handler handler = new Handler();
+    private Runnable myRunnable;
+    public void loadBannerAd(AdRequest adRequest){
+        mAdView.loadAd(adRequest);
+        myRunnable = new Runnable() {
+            public void run() {
+                loadBannerAd(adRequest);
+            }
+        };
+        handler.postDelayed(myRunnable, 10000);
+    }
+    public void loadNativeAd(AdLoader adLoader){
+        adLoader.loadAd(new AdRequest.Builder().build());
+        myRunnable = new Runnable() {
+            public void run() {
+                loadNativeAd(adLoader);
+            }
+        };
+        handler.postDelayed(myRunnable, 10000);
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ChangeLanguage.setLocal(this,ChangeLanguage.getLangCode(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dialog = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
             }
         });
-        AdView mAdView = findViewById(R.id.adView);
+        mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        loadInterstitialAd();
+        loadBannerAd(adRequest);
+        AdLoader adLoader = new AdLoader.Builder(this, "ca-app-pub-7773722896374259/5378732148")
+                .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+                    @Override
+                    public void onNativeAdLoaded(NativeAd nativeAd) {
+                        int color = Color.parseColor("#AE6118");
+                        NativeTemplateStyle styles = new
+                                NativeTemplateStyle.Builder().withMainBackgroundColor(new ColorDrawable(getResources().getColor(R.color.teal_200))).build();
+                        TemplateView template = findViewById(R.id.my_template);
+                        template.setStyles(styles);
+                        template.setNativeAd(nativeAd);
+
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError adError) {
+                        // Handle the failure by logging, altering the UI, and so on.
+                    }
+                })
+                .withNativeAdOptions(new NativeAdOptions.Builder()
+                        // Methods in the NativeAdOptions.Builder class can be
+                        // used here to specify individual options settings.
+                        .build())
+                .build();
+        loadNativeAd(adLoader);
 
         _ip=findViewById(R.id._ip);
         ip_lookup=findViewById(R.id.ip_lookup);
@@ -230,13 +342,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, NoInternetActivity.class));
         }
         else {
+            dialog.show();
             LoadData("");
             ip_lookup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    dialog.show();
                     String ip2=_ip.getText().toString();
                     if(isValid(ip2)){
-                        LoadData(ip2);
+                        loadInterstitialAd(ip2);
                     }
                     else {
                         reason.setText(getString(R.string.invalid_ip));
@@ -256,23 +370,24 @@ public class MainActivity extends AppCompatActivity {
                         asn_tab.setVisibility(View.GONE);
                         org_tab.setVisibility(View.GONE);
                     }
-                    Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
                 }
             });
             my_ip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LoadData("");
+                    dialog.show();
+                    loadRewardedad();
                 }
             });
             map.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    loadRewardedad();
+                    dialog.show();
                     Bundle bundle = new Bundle();
                     bundle.putString("latitude_text", latitude_text);
                     bundle.putString("longitude_text", longitude_text);
-                    startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
+                    loadRewardedInterstitialAd(bundle);
                 }
             });
         }
@@ -543,15 +658,17 @@ public class MainActivity extends AppCompatActivity {
                         Glide.with(MainActivity.this).load(country_flag_url).into(country_flag);
                         //Utils.fetchSvg(MainActivity.this, country_flag_url, country_flag);
                     }
+                    dialog.dismiss();
                 }
                 else if (response.errorBody() != null) {
                     // Get response errorBody
                     String errorBody = response.errorBody().toString();
                     Log.e("errorBody",errorBody);
                     Toast.makeText(getBaseContext(),errorBody,Toast.LENGTH_LONG).show();
-
+                    dialog.dismiss();
                 }
                 else {
+                    dialog.dismiss();
                     String message="Xatolik yuz berdi. keyinroq yana urinib ko'rig";
                     Toast.makeText(getBaseContext(),message,Toast.LENGTH_LONG).show();
                 }
@@ -559,6 +676,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<_Response> call, Throwable t) {
+                dialog.dismiss();
                 startActivity(new Intent(MainActivity.this, ServerErrorActivity.class));
 
             }
@@ -610,6 +728,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setIcon(R.mipmap.ic_launcher)
                         .setTitle(R.string.app_name)
                         .setView(aboutView)
+                        .setCancelable(false)
                         .setPositiveButton("OK", null);
                 AlertDialog alert = builder.create();
                 alert.show();
@@ -646,5 +765,10 @@ public class MainActivity extends AppCompatActivity {
         super.finish();
         //StartAppAd.onBackPressed(this);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+
     }
 }

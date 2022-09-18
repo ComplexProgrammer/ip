@@ -15,7 +15,7 @@
     <string name="sum">Сумма</string>
     <string name="version">Версия %s</string>
     <string name="send_me_bugs">Если вы столкнетесь с ошибкой, не стесняйтесь обращаться ко мне по электронной почте.</string>
-    <string name="site_url">http://complexprogrammer.uz:4444</string>
+    <string name="site_url">www.complexprogrammer.uz</string>
     <string name="email">complexprogrammer@mail.ru</string>
     <string name="developer_label">Разработчик</string>
     <string name="developer">Odiljon Gaybullaev</string>
