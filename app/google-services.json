@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "755681568857-jibauigt859on2cem33nf4352s5vs2rk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "youtubedownloader.complexprogrammer.uz",
+            "certificate_hash": "5e54abb8390ca8481730a72b3448d963c422df32"
+          }
+        },
+        {
           "client_id": "755681568857-m6h958r9t1d9e4aa9dtpdhdhrv1qd8o0.apps.googleusercontent.com",
           "client_type": 3
         }
