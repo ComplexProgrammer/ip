@@ -47,8 +47,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 onBackPressed();
-//                finish();
-//                startActivity(new Intent(MapsActivity.this, MainActivity.class));
             }
         });
         dropdown = findViewById(R.id.spinner1);
@@ -60,6 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MapsActivity.this, MainActivity.class));
     }
 
     /**

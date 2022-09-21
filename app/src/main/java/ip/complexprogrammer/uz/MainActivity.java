@@ -1,8 +1,13 @@
 package ip.complexprogrammer.uz;
 
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
+
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,6 +59,8 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     private static final Pattern pattern = Pattern.compile(IPV4_PATTERN);
     private ImageView loadingImage;
     private ProgressDialog dialog;
+    private boolean is_pause;
 
     public static boolean isValid(final String email) {
         Matcher matcher = pattern.matcher(email);
@@ -222,8 +232,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                             @Override
                             public void onAdDismissedFullScreenContent() {
                                 super.onAdDismissedFullScreenContent();
-                                handler.removeCallbacks(myRunnable);
-                                dialog.dismiss();
+                                onBackPressed();
                                 startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                             }
 
@@ -247,39 +256,43 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                     public void onAdFailedToLoad(LoadAdError loadAdError) {
                         Log.d(TAG, loadAdError.toString());
                         rewardedInterstitialAd = null;
-                        handler.removeCallbacks(myRunnable);
-                        dialog.dismiss();
+                        onBackPressed();
                         startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                     }
                 });
     }
     private AdView mAdView;
-    private Handler handler = new Handler();
-    private Runnable myRunnable;
+    private Handler handler;
+    private Runnable runnableBannerAd,runnableNativeAd;
     public void loadBannerAd(AdRequest adRequest){
         mAdView.loadAd(adRequest);
-        myRunnable = new Runnable() {
+        runnableBannerAd = new Runnable() {
             public void run() {
+//                Toast.makeText(getBaseContext(),"loadBannerAd",Toast.LENGTH_SHORT).show();
                 loadBannerAd(adRequest);
             }
         };
-        handler.postDelayed(myRunnable, 10000);
+        handler.postDelayed(runnableBannerAd, 10000);
     }
     public void loadNativeAd(AdLoader adLoader){
         adLoader.loadAd(new AdRequest.Builder().build());
-        myRunnable = new Runnable() {
+        runnableNativeAd = new Runnable() {
             public void run() {
+//                Toast.makeText(getBaseContext(),"loadNativeAd",Toast.LENGTH_SHORT).show();
                 loadNativeAd(adLoader);
             }
         };
-        handler.postDelayed(myRunnable, 10000);
+        handler.postDelayed(runnableNativeAd, 10000);
 
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        is_pause=false;
+        Log.e("onCreate","onCreate");
         ChangeLanguage.setLocal(this,ChangeLanguage.getLangCode(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        handler=new Handler();
         dialog = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
@@ -299,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                         NativeTemplateStyle styles = new
                                 NativeTemplateStyle.Builder().withMainBackgroundColor(new ColorDrawable(getResources().getColor(R.color.teal_200))).build();
                         TemplateView template = findViewById(R.id.my_template);
-                        template.setStyles(styles);
+//                        template.setStyles(styles);
                         template.setNativeAd(nativeAd);
 
                     }
@@ -391,6 +404,33 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 }
             });
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        dialog.dismiss();
+        handler.removeCallbacks(runnableBannerAd);
+        handler.removeCallbacks(runnableNativeAd);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(is_pause){
+            handler.postDelayed(runnableBannerAd, 10000);
+            handler.postDelayed(runnableNativeAd, 10000);
+            Log.e("onResume","onResume");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        is_pause=true;
+        super.onPause();
+        dialog.dismiss();
+        handler.removeCallbacks(runnableBannerAd);
+        handler.removeCallbacks(runnableNativeAd);
+        Log.e("onPause","onPause");
     }
     public void LoadData(String ip_address){
         Call<_Response> _response=null;
@@ -760,12 +800,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public void onBackPressed() {
-        super.finish();
-        handler.removeCallbacks(myRunnable);
-        super.onBackPressed();
-    }
+
 
     @Override
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
