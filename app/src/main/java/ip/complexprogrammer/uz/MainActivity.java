@@ -763,7 +763,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     @Override
     public void onBackPressed() {
         super.finish();
-        //StartAppAd.onBackPressed(this);
+        handler.removeCallbacks(myRunnable);
         super.onBackPressed();
     }
 
