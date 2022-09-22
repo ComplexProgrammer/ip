@@ -417,16 +417,16 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     protected void onResume() {
         super.onResume();
         if(is_pause){
-            handler.postDelayed(runnableBannerAd, 10000);
-            handler.postDelayed(runnableNativeAd, 10000);
+            handler.postDelayed(runnableBannerAd, 0);
+            handler.postDelayed(runnableNativeAd, 0);
             Log.e("onResume","onResume");
         }
     }
 
     @Override
     protected void onPause() {
-        is_pause=true;
         super.onPause();
+        is_pause=true;
         dialog.dismiss();
         handler.removeCallbacks(runnableBannerAd);
         handler.removeCallbacks(runnableNativeAd);
