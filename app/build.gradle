@@ -34,6 +34,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 dependencies {
     implementation project(':nativetemplates')
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics:21.1.1'
     implementation 'com.google.android.gms:play-services-ads:21.2.0'
