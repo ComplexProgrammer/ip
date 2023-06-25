@@ -3,7 +3,7 @@ package ip.complexprogrammer.uz.services;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.pixplicity.sharp.Sharp;
+//import com.pixplicity.sharp.Sharp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +40,7 @@ public class Utils {
                 // from url in our target imageview.
                 InputStream stream = response.body().byteStream();
                 try{
-                    Sharp.loadInputStream(stream).into(target);
+//                    Sharp.loadInputStream(stream).into(target);
                 }
                 catch (Exception ignored){
 

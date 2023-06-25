@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IP finder</string>
+    <string name="app_name">IP Finder</string>
     <string name="no_internet_is_available">No internet is available</string>>
     <string name="uzbek">O\'zbek</string>
     <string name="uzbekc">Ўзбек</string>
@@ -52,4 +52,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="map">Map</string>
     <string name="invalid_ip">Invalid IP</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

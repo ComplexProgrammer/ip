@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">IP qidiruvchi</string>
+    <string name="app_name">IP Qidiruvchi</string>
     <string name="no_internet_is_available">Internet yo\'q</string>>
     <string name="uzbek">O\'zbek</string>
     <string name="uzbekc">Ўзбек</string>
@@ -53,4 +53,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="map">Xarita</string>
     <string name="invalid_ip">Noto\'g\'ri IP</string>
+    <string name="drawer_open">Ochish</string>
+    <string name="drawer_close">Yopish</string>
 </resources>

@@ -5,6 +5,7 @@ import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIB
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -22,6 +23,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -261,9 +265,71 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                     }
                 });
     }
+    void animation(View view) {
+        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        double animationDuration = 0.2 * 10000;
+        myAnim.setDuration((long) animationDuration);
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.1, 20);
+        myAnim.setInterpolator(interpolator);
+        view.startAnimation(myAnim);
+        myAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                animation(view);
+            }
+        });
+    }
+    void show_dialog(int i, Bundle bundle, String ip_address){
+        final Dialog dialog2 = new Dialog(this);
+        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog2.setCancelable(false);
+        dialog2.setContentView(R.layout.dialog);
+        dialog2.show();
+        ImageView close_background = dialog2.findViewById(R.id.close_background);
+        TextView close_button = dialog2.findViewById(R.id.close_button);
+        runnable = new Runnable() {
+            public void run() {
+                close_background.setVisibility(View.VISIBLE);
+                close_button.setVisibility(View.VISIBLE);
+            }
+        };
+        handler.postDelayed(runnable, 4000);
+        TextView click_button = dialog2.findViewById(R.id.click_button);
+        close_button.setText(getString(R.string.drawer_close));
+        click_button.setText(getString(R.string.drawer_open));
+        animation(click_button);
+        close_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog2.dismiss();
+            }
+        });
+        click_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog2.dismiss();
+                dialog.show();
+                switch (i){
+                    case 1: loadInterstitialAd(ip_address);
+                    case 2: loadRewardedad();
+                    case 3: loadRewardedInterstitialAd(bundle);
+                }
+//                loadAd(BiletlarModel.get(position));
+            }
+        });
+
+
+    }
     private AdView mAdView;
     private Handler handler;
-    private Runnable runnableBannerAd,runnableNativeAd;
+    private Runnable runnableBannerAd,runnableNativeAd, runnable;
     public void loadBannerAd(AdRequest adRequest){
         mAdView.loadAd(adRequest);
         runnableBannerAd = new Runnable() {
@@ -360,10 +426,9 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
             ip_lookup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.show();
                     String ip2=_ip.getText().toString();
                     if(isValid(ip2)){
-                        loadInterstitialAd(ip2);
+                        show_dialog(1, null, ip2);
                     }
                     else {
                         reason.setText(getString(R.string.invalid_ip));
@@ -389,18 +454,16 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
             my_ip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.show();
-                    loadRewardedad();
+                    show_dialog(2, null, "");
                 }
             });
             map.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.show();
                     Bundle bundle = new Bundle();
                     bundle.putString("latitude_text", latitude_text);
                     bundle.putString("longitude_text", longitude_text);
-                    loadRewardedInterstitialAd(bundle);
+                    show_dialog(3, bundle, "");
                 }
             });
         }

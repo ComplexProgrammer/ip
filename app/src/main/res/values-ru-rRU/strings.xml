@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">IP искатель</string>
+    <string name="app_name">IP Искатель</string>
     <string name="no_internet_is_available">Нет интернета</string>>
     <string name="uzbek">O\'zbek</string>
     <string name="uzbekc">Ўзбек</string>
@@ -53,4 +53,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="map">Kарта</string>
     <string name="invalid_ip">Неверный IP</string>
+    <string name="drawer_open">открыть</string>
+    <string name="drawer_close">Закрывать</string>
 </resources>
