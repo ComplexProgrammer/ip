@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 close_button.setVisibility(View.VISIBLE);
             }
         };
-        handler.postDelayed(runnable, 4000);
+        handler.postDelayed(runnable, 1000);
         TextView click_button = dialog2.findViewById(R.id.click_button);
         close_button.setText(getString(R.string.drawer_close));
         click_button.setText(getString(R.string.drawer_open));
