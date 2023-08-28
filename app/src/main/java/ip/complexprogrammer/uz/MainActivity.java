@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     void show_dialog(int i, Bundle bundle, String ip_address){
         final Dialog dialog2 = new Dialog(this);
         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog2.setCancelable(false);
         dialog2.setContentView(R.layout.dialog);
         dialog2.show();
@@ -317,11 +317,12 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 dialog2.dismiss();
                 dialog.show();
                 switch (i){
-                    case 1: loadInterstitialAd(ip_address);
-                    case 2: loadRewardedad();
+//                    case 1: loadInterstitialAd(ip_address);
+                    case 1: LoadData(ip_address);
+//                    case 2: loadRewardedad();
+                    case 2: LoadData("");
                     case 3: loadRewardedInterstitialAd(bundle);
                 }
-//                loadAd(BiletlarModel.get(position));
             }
         });
 
