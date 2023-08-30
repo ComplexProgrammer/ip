@@ -317,12 +317,12 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 dialog2.dismiss();
                 dialog.show();
                 switch (i){
-//                    case 1: loadInterstitialAd(ip_address);
-                    case 1: LoadData(ip_address);
-//                    case 2: loadRewardedad();
-                    case 2: LoadData("");
-//                    case 3: loadRewardedInterstitialAd(bundle);
-                    case 3: startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));;
+                    case 1: loadInterstitialAd(ip_address);
+//                    case 1: LoadData(ip_address);
+                    case 2: loadRewardedad();
+//                    case 2: LoadData("");
+                    case 3: loadRewardedInterstitialAd(bundle);
+//                    case 3: startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));;
                 }
             }
         });
