@@ -5,7 +5,7 @@
         android:id="@+id/telegram"
         android:icon="@drawable/telegram"
         android:title="@string/telegram"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/about"
         android:title="@string/about"
