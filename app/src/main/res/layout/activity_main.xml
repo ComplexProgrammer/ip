@@ -43,6 +43,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:maxLength="15"
                             android:ems="10"
                             android:hint="@string/ip"
                             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
