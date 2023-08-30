@@ -26,17 +26,17 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autoLink="all"
-            android:gravity="fill_horizontal"
+            android:gravity="center"
             android:text="@string/send_me_bugs" />
 
-        <TextView
+<!--        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autoLink="all"
             android:gravity="center_horizontal"
-            android:text="@string/site_url" />
+            android:text="@string/site_url" />-->
 
         <TextView
             android:layout_width="fill_parent"

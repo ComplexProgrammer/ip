@@ -807,16 +807,16 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.telegram:
-                try {
-                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/complexprogrammer"));
-                    startActivity(myIntent);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, "No application can handle this request."
-                            + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-                return true;
+//            case R.id.telegram:
+//                try {
+//                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/complexprogrammer"));
+//                    startActivity(myIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    Toast.makeText(this, "No application can handle this request."
+//                            + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
+//                    e.printStackTrace();
+//                }
+//                return true;
             case R.id.about:
                 LayoutInflater factory = LayoutInflater.from(MainActivity.this);
                 final View aboutView = factory.inflate(R.layout.about, null);
