@@ -317,12 +317,12 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 dialog2.dismiss();
                 dialog.show();
                 switch (i){
-                    case 1: loadInterstitialAd(ip_address);
-//                    case 1: LoadData(ip_address);
-                    case 2: loadRewardedad();
-//                    case 2: LoadData("");
-                    case 3: loadRewardedInterstitialAd(bundle);
-//                    case 3: startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));;
+//                    case 1: loadInterstitialAd(ip_address);
+                    case 1: LoadData(ip_address);
+//                    case 2: loadRewardedad();
+                    case 2: LoadData("");
+//                    case 3: loadRewardedInterstitialAd(bundle);
+                    case 3: startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                 }
             }
         });
@@ -423,14 +423,15 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
             startActivity(new Intent(this, NoInternetActivity.class));
         }
         else {
-            dialog.show();
             LoadData("");
             ip_lookup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String ip2=_ip.getText().toString();
                     if(isValid(ip2)){
-                        show_dialog(1, null, ip2);
+                        //show_dialog(1, null, ip2);
+                        //LoadData(ip2);
+                        loadInterstitialAd(ip2);
                     }
                     else {
                         reason.setText(getString(R.string.invalid_ip));
@@ -456,7 +457,8 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
             my_ip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    show_dialog(2, null, "");
+                    //show_dialog(2, null, "");
+                    LoadData("");
                 }
             });
             map.setOnClickListener(new View.OnClickListener() {
@@ -465,7 +467,8 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                     Bundle bundle = new Bundle();
                     bundle.putString("latitude_text", latitude_text);
                     bundle.putString("longitude_text", longitude_text);
-                    show_dialog(3, bundle, "");
+                    //show_dialog(3, bundle, "");
+                    startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
                 }
             });
         }
@@ -498,6 +501,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
         Log.e("onPause","onPause");
     }
     public void LoadData(String ip_address){
+        dialog.show();
         Call<_Response> _response=null;
         if(ip_address.equals("")){
             _response = ApiClient.getInterface().GetMyIpData();
