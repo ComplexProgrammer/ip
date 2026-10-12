@@ -1,58 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">IP Qidiruvchi</string>
-    <string name="no_internet_is_available">Internet yo\'q</string>>
-    <string name="uzbek">O\'zbek</string>
-    <string name="uzbekc">Ўзбек</string>
+    <string name="loading">Yuklanmoqda…</string>
+
+    <!-- Navigation -->
+    <string name="nav_lookup">Qidiruv</string>
+    <string name="nav_history">Tarix</string>
+    <string name="nav_tools">Vositalar</string>
+    <string name="nav_device">Qurilma</string>
+
+    <!-- Lookup -->
+    <string name="hint_ip_or_domain">IP manzil yoki domen</string>
+    <string name="helper_ip_or_domain">IPv4, IPv6 yoki google.com kabi domen</string>
+    <string name="lookup">Qidirish</string>
+    <string name="my_ip">Mening IP</string>
+    <string name="paste">Qo\'yish</string>
+    <string name="clear">Tozalash</string>
+    <string name="input_invalid">To\'g\'ri IPv4, IPv6 manzil yoki domen nomini kiriting</string>
+    <string name="data_disclosure">Kiritilgan manzil joylashuvini aniqlash uchun ipapi.co (zaxira: ipwho.is) serveriga yuboriladi.</string>
+    <string name="resolved_from">%1$s → %2$s</string>
+    <string name="section_network">Tarmoq</string>
+    <string name="section_location">Joylashuv</string>
+    <string name="section_country">Mamlakat</string>
+    <string name="section_details">Batafsil</string>
+    <string name="show_more">Ko\'proq ko\'rsatish</string>
+    <string name="show_less">Kamroq ko\'rsatish</string>
+    <string name="label_ip">IP manzil</string>
+    <string name="label_ip_version">Versiya</string>
+    <string name="label_asn">ASN</string>
+    <string name="label_org">Provayder</string>
+    <string name="label_city">Shahar</string>
+    <string name="label_region">Viloyat</string>
+    <string name="label_postal">Pochta indeksi</string>
+    <string name="label_coordinates">Koordinatalar</string>
+    <string name="label_country">Mamlakat</string>
+    <string name="label_capital">Poytaxt</string>
+    <string name="label_calling_code">Telefon kodi</string>
+    <string name="label_currency">Valyuta</string>
+    <string name="label_languages">Tillar</string>
+    <string name="label_timezone">Vaqt zonasi</string>
+    <string name="label_local_time">Mahalliy vaqt</string>
+    <string name="label_in_eu">Yevropa Ittifoqi</string>
+    <string name="label_region_code">Viloyat kodi</string>
+    <string name="label_iso3">ISO kodi</string>
+    <string name="label_tld">Domen zonasi</string>
+    <string name="label_area">Maydoni</string>
+    <string name="label_population">Aholisi</string>
+    <string name="label_continent">Qit\'a</string>
+    <string name="yes">Ha</string>
+    <string name="no">Yo\'q</string>
+    <string name="action_map">Xarita</string>
+    <string name="action_copy">Nusxalash</string>
+    <string name="action_share">Ulashish</string>
+    <string name="action_favorite_add">Sevimlilarga qo\'shish</string>
+    <string name="action_favorite_remove">Sevimlilardan olib tashlash</string>
+    <string name="favorite_added">Sevimlilarga qo\'shildi</string>
+    <string name="favorite_removed">Sevimlilardan olib tashlandi</string>
+    <string name="copied">Nusxalandi: %s</string>
+    <string name="copied_all">Barcha ma\'lumotlar nusxalandi</string>
+    <string name="long_press_to_copy">Nusxalash uchun qiymatni bosib turing</string>
+    <string name="share_title">IP ma\'lumotlarini ulashish</string>
+    <string name="approx_location_note">Joylashuv taxminiy: odatda provayder yoki shahar markazi ko\'rsatiladi, aniq ko\'cha manzili emas.</string>
+    <string name="vpn_active">VPN yoqilgan</string>
+    <string name="vpn_inactive">VPN o\'chiq</string>
+    <string name="ip_changed">IP manzilingiz o\'zgardi: %1$s → %2$s</string>
+    <string name="data_source">Manba: %s</string>
+
+    <!-- Errors -->
+    <string name="error_no_internet_title">Internet aloqasi yo\'q</string>
+    <string name="error_no_internet_msg">Wi-Fi yoki mobil internetni tekshirib, qayta urinib ko\'ring.</string>
+    <string name="error_server_title">Xizmat javob bermayapti</string>
+    <string name="error_server_msg">Ma\'lumotlarni olib bo\'lmadi. Birozdan so\'ng qayta urinib ko\'ring.</string>
+    <string name="error_rate_limited_msg">Bepul so\'rovlar limiti hozircha tugadi. Keyinroq qayta urinib ko\'ring.</string>
+    <string name="error_reserved_title">Xususiy manzil</string>
+    <string name="error_reserved_msg">%s xususiy yoki zahiralangan manzil (uy tarmog\'i, loopback va h.k.). Bunday manzillarning ommaviy joylashuvi bo\'lmaydi.</string>
+    <string name="error_unknown_host_title">Domen topilmadi</string>
+    <string name="error_unknown_host_msg">%s uchun IP manzil topilmadi. Yozilishini tekshiring.</string>
+    <string name="retry">Qayta urinish</string>
+
+    <!-- History -->
+    <string name="history_empty">Hali qidiruvlar yo\'q.\nQidirilgan manzillar shu yerda chiqadi.</string>
+    <string name="history_clear">Tarixni tozalash</string>
+    <string name="history_clear_confirm">Barcha oxirgi qidiruvlar o\'chirilsinmi? Sevimlilar saqlanib qoladi.</string>
+    <string name="history_favorites">Sevimlilar</string>
+    <string name="history_recent">Oxirgilar</string>
+    <string name="history_removed">Tarixdan o\'chirildi</string>
+    <string name="undo">Bekor qilish</string>
+    <string name="delete">O\'chirish</string>
+    <string name="cancel">Bekor qilish</string>
+
+    <!-- Tools -->
+    <string name="tools_host_hint">Host yoki IP</string>
+    <string name="tool_ping">Ping</string>
+    <string name="tool_dns">DNS</string>
+    <string name="tool_whois">WHOIS</string>
+    <string name="tool_ports">Portlar</string>
+    <string name="tool_run">Boshlash</string>
+    <string name="tool_stop">To\'xtatish</string>
+    <string name="tool_ping_desc">Host javob beryaptimi va qanchalik tez ekanini tekshiradi (4 paket).</string>
+    <string name="tool_dns_desc">Domen qaysi IPv4/IPv6 manzillarga bog\'langanini ko\'rsatadi.</string>
+    <string name="tool_whois_desc">Domen yoki IP diapazoni egasi haqida ma\'lumot beradi.</string>
+    <string name="tool_ports_desc">%d ta mashhur portni tekshiradi (veb, pochta, SSH, VPN…).</string>
+    <string name="tool_host_required">Host yoki IP manzilni kiriting</string>
+    <string name="tool_error">Xatolik: %s</string>
+    <string name="tool_stopped">To\'xtatildi</string>
+    <string name="tool_output_empty">Natijalar shu yerda chiqadi</string>
+    <string name="port_open">ochiq</string>
+    <string name="ports_summary">%2$d ta mashhur portdan %1$d tasi ochiq</string>
+    <string name="tool_copy_output">Natijani nusxalash</string>
+
+    <!-- Device -->
+    <string name="device_public_ip">Tashqi IP</string>
+    <string name="device_check_public">Tashqi IP ni tekshirish</string>
+    <string name="device_connection">Ulanish</string>
+    <string name="device_vpn">VPN</string>
+    <string name="device_interface">Interfeys</string>
+    <string name="device_local_ip">Lokal IP</string>
+    <string name="device_gateway">Shlyuz</string>
+    <string name="device_dns">DNS serverlar</string>
+    <string name="device_private_dns">Shaxsiy DNS</string>
+    <string name="device_refresh">Yangilash</string>
+    <string name="device_unknown">Noma\'lum</string>
+    <string name="transport_wifi">Wi-Fi</string>
+    <string name="transport_cellular">Mobil internet</string>
+    <string name="transport_ethernet">Ethernet</string>
+    <string name="transport_vpn">VPN</string>
+    <string name="transport_other">Boshqa</string>
+    <string name="transport_none">Ulanmagan</string>
+    <string name="on">Yoqilgan</string>
+    <string name="off">O\'chiq</string>
+
+    <!-- Menu -->
+    <string name="menu_remove_ads">24 soat reklamasiz</string>
+    <string name="menu_theme">Mavzu</string>
+    <string name="theme_system">Tizim bo\'yicha</string>
+    <string name="theme_light">Yorug\'</string>
+    <string name="theme_dark">Tungi</string>
+    <string name="language">Til</string>
+    <string name="about">Ilova haqida</string>
+    <string name="privacy_policy">Maxfiylik siyosati</string>
+    <string name="telegram">Telegram</string>
+    <string name="uzbek">O\'zbekcha</string>
     <string name="english">English</string>
     <string name="russian">Русский</string>
-    <string name="splash_title">Complex Programmer</string>
-    <string name="splash_subtitle">complexprogrammer.uz</string>
-    <string name="language">Til</string>
-    <string name="about">Biz haqimizda</string>
-    <string name="telegram">Telegram</string>
-    <string name="current_time">Joriy vaqt</string>
-    <string name="sum">So\'m</string>
+    <string name="no_browser">Bu havolani ochadigan ilova topilmadi</string>
+
+    <!-- Ad-free -->
+    <string name="remove_ads_title">Ilovadan reklamasiz foydalaning</string>
+    <string name="remove_ads_msg">Bitta qisqa video ko\'ring va barcha reklamalar 24 soatga o\'chiriladi.</string>
+    <string name="remove_ads_watch">Videoni ko\'rish</string>
+    <string name="remove_ads_active">Reklamalar %s gacha o\'chirilgan. Yana 24 soat qo\'shish uchun yana bitta video ko\'ring.</string>
+    <string name="remove_ads_thanks">Rahmat! Reklamalar 24 soatga o\'chirildi.</string>
+    <string name="remove_ads_unavailable">Hozircha video mavjud emas. Keyinroq urinib ko\'ring.</string>
+
+    <!-- About / privacy -->
     <string name="version">Versiya %s</string>
-    <string name="send_me_bugs">Agar siz xatoga duch kelsangiz, men bilan elektron pochta orqali bog\'lanishingiz mumkin.</string>
+    <string name="send_me_bugs">Agar xatoga duch kelsangiz, men bilan elektron pochta orqali bog\'laning.</string>
     <string name="site_url">www.complexprogrammer.uz</string>
     <string name="email">complexprogrammer@mail.ru</string>
     <string name="developer_label">Dasturchi</string>
     <string name="developer">Odiljon Gaybullaev</string>
-    <string name="back">orqaga</string>
-    <string name="server_error">Serverda xatolik yuz berdi. Iltimos keyinroq qayta urinib ko\'ring.</string>
-    <string name="ip">IP manzili</string>
-    <string name="city">Shahar</string>
-    <string name="region">Hudud</string>
-    <string name="country">Mamlakat</string>
-    <string name="in_eu">Yevropa Ittifoqi</string>
-    <string name="country_calling_code">Telefon kodi</string>
-    <string name="currency">Valyuta</string>
-    <string name="languages">Tillar</string>
-    <string name="asn">ASN</string>
-    <string name="org">Org</string>
-    <string name="ip_lookup">IP qidiruvi</string>
-    <string name="latitude">Kenglik</string>
-    <string name="longitude">Uzunlik</string>
-    <string name="timezone">Vaqt zonasi</string>
-    <string name="position">Kenglik / Uzunlik</string>
-    <string name="my_ip">Mening IP</string>
-    <string name="region_code">region_code</string>
-    <string name="country_code">country_code</string>
-    <string name="country_code_iso3">country_code_iso3</string>
-    <string name="country_name">country_name</string>
-    <string name="country_capital">country_capital</string>
-    <string name="country_tld">country_tld</string>
-    <string name="country_area">country_area</string>
-    <string name="country_population">country_population</string>
-    <string name="continent_code">continent_code</string>
-    <string name="postal">pochta</string>
-    <string name="latlong">latlong</string>
-    <string name="utc_offset">utc_offset</string>
-    <string name="currency_name">currency_name</string>
-    <string name="title_activity_maps">MapsActivity</string>
-    <string name="map">Xarita</string>
-    <string name="invalid_ip">Noto\'g\'ri IP</string>
-    <string name="drawer_open">Ochish</string>
-    <string name="drawer_close">Yopish</string>
+    <string name="about_data_sources">Joylashuv ma\'lumotlari: ipapi.co, ipwho.is. Xarita: Google Maps.</string>
+    <string name="privacy_text">• Ilovada akkaunt yo\'q, u ismingiz, kontaktlaringiz yoki fayllaringizni yig\'maydi.\n\n• Siz qidirgan IP manzil va domenlar faqat joylashuv ma\'lumotini olish uchun ipapi.co serveriga, u ishlamasa ipwho.is serveriga yuboriladi.\n\n• Qidiruvlar tarixi va sozlamalar faqat qurilmangizda saqlanadi. Tarixni istalgan vaqtda tozalashingiz mumkin.\n\n• Reklamalarni Google AdMob ko\'rsatadi va u reklama identifikatoridan foydalanishi mumkin. Xatolarni tuzatish uchun Firebase nosozlik hisobotlari va anonim statistikani yig\'adi.\n\n• Tarmoq vositalari (ping, DNS, WHOIS, portlar) qurilmangizdan to\'g\'ridan-to\'g\'ri siz kiritgan hostga ulanadi.</string>
+    <string name="privacy_open_full">To\'liq matn</string>
+    <string name="ok">OK</string>
+
+    <!-- Map -->
+    <string name="map_type_normal">Xarita</string>
+    <string name="map_type_hybrid">Gibrid</string>
+    <string name="map_type_satellite">Sun\'iy yo\'ldosh</string>
+    <string name="map_type_terrain">Relyef</string>
+    <string name="map_approx_title">Taxminiy joylashuv</string>
+    <string name="map_approx_msg">Doira ehtimoliy hududni ko\'rsatadi. IP manzil orqali aniq ko\'cha manzilini bilib bo\'lmaydi.</string>
+    <string name="back">Orqaga</string>
+
+    <!-- Widget -->
+    <string name="widget_description">Tashqi IP manzilingizni ko\'rsatadi</string>
+    <string name="widget_title">Mening IP</string>
+    <string name="widget_tap_to_refresh">Yangilash uchun bosing</string>
+    <string name="widget_updated">Yangilandi: %s</string>
+    <string name="widget_error">Aloqa yo\'q</string>
 </resources>

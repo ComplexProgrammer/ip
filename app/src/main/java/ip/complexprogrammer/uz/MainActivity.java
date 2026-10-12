@@ -1,878 +1,264 @@
 package ip.complexprogrammer.uz;
 
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
-
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
-import com.google.android.ads.nativetemplates.NativeTemplateStyle;
-import com.google.android.ads.nativetemplates.TemplateView;
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.ads.nativead.NativeAd;
-import com.google.android.gms.ads.nativead.NativeAdOptions;
-import com.google.android.gms.ads.rewarded.RewardItem;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Date;
 
-import ip.complexprogrammer.uz.models._Response;
-import ip.complexprogrammer.uz.services.ApiClient;
-import ip.complexprogrammer.uz.services.ChangeLanguage;
-import ip.complexprogrammer.uz.services.LoadingScreen;
-import ip.complexprogrammer.uz.services.NetworkUtil;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import ip.complexprogrammer.uz.databinding.ActivityMainBinding;
+import ip.complexprogrammer.uz.services.AdsManager;
+import ip.complexprogrammer.uz.services.AppPrefs;
+import ip.complexprogrammer.uz.ui.DeviceFragment;
+import ip.complexprogrammer.uz.ui.HistoryFragment;
+import ip.complexprogrammer.uz.ui.LookupFragment;
+import ip.complexprogrammer.uz.ui.ToolsFragment;
+import ip.complexprogrammer.uz.ui.UiUtils;
 
-public class MainActivity extends AppCompatActivity implements OnUserEarnedRewardListener{
-    String ip_text,error_text,reason_text,reserved_text,version_text,city_text,region_text,region_code_text,country_text,
-            country_code_text,country_code_iso3_text,country_name_text,country_capital_text,country_tld_text,country_area_text,
-            country_population_text,continent_code_text,in_eu_text,postal_text,latlong_text,
-            timezone_text,utc_offset_text,country_calling_code_text,currency_text,currency_name_text,languages_text,
-            asn_text,org_text;
-    String latitude_text,longitude_text;
-    TableRow reason_tab,city_tab,map_tab,region_tab,country_tab,in_eu_tab,position_tab,longitude_tab,timezone_tab,country_calling_code_tab,currency_tab,languages_tab,asn_tab,org_tab;
-    TextView reason,ip;
-    EditText _ip;
-    Button ip_lookup,my_ip,map;
-    private static final String AD_UNIT_ID = "ca-app-pub-7773722896374259/2800286177";
-    private static final String TAG = "MainActivity";
-    private InterstitialAd interstitialAd;
-    private RewardedInterstitialAd rewardedInterstitialAd;
-    private RewardedAd mRewardedAd;
-    private _Response ResponseList=new _Response();
-    private static final String IPV4_PATTERN =
-            "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
-    private static final Pattern pattern = Pattern.compile(IPV4_PATTERN);
-    private ImageView loadingImage;
-    private ProgressDialog dialog;
-    private boolean is_pause;
+public class MainActivity extends AppCompatActivity {
+    private static final String BANNER_ID = "ca-app-pub-7773722896374259/8849931038";
+    private static final String TAG_LOOKUP = "lookup";
+    private static final String TAG_HISTORY = "history";
+    private static final String TAG_TOOLS = "tools";
+    private static final String TAG_DEVICE = "device";
 
-    public static boolean isValid(final String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-    public void loadInterstitialAd(String ip_address) {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        InterstitialAd.load(
-                this,
-                AD_UNIT_ID,
-                adRequest,
-                new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        // The mInterstitialAd reference will be null until
-                        // an ad is loaded.
-                        interstitialAd.show(MainActivity.this);
-                        //MainActivity.this.interstitialAd = interstitialAd;
-                        interstitialAd.setFullScreenContentCallback(
-                                new FullScreenContentCallback() {
-                                    @Override
-                                    public void onAdDismissedFullScreenContent() {
-                                        LoadData(ip_address);
-                                        MainActivity.this.interstitialAd = null;
-                                        Log.d("TAG", "The ad was dismissed.");
-                                    }
+    private ActivityMainBinding binding;
+    private AdView bannerView;
 
-                                    @Override
-                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                        // Called when fullscreen content failed to show.
-                                        // Make sure to set your reference to null so you don't
-                                        // show it a second time.
-                                        MainActivity.this.interstitialAd = null;
-                                        Log.d("TAG", "The ad failed to show.");
-                                    }
-
-                                    @Override
-                                    public void onAdShowedFullScreenContent() {
-                                        // Called when fullscreen content is shown.
-                                        Log.d("TAG", "The ad was shown.");
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        LoadData(ip_address);
-                        Log.i(TAG, loadAdError.getMessage());
-                        interstitialAd = null;
-
-                        String error =
-                                String.format(
-                                        "domain: %s, code: %d, message: %s",
-                                        loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
-//                        Toast.makeText(
-//                                MainActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
-//                                .show();
-                    }
-                });
-    }
-    public void loadRewardedad(){
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        RewardedAd.load(this, "ca-app-pub-7773722896374259/5043306138",
-                adRequest, new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        LoadData("");
-                        Log.d(TAG, loadAdError.getMessage());
-                        mRewardedAd = null;
-
-                    }
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        mRewardedAd = rewardedAd;
-                        Log.d(TAG, "Ad was loaded.");
-                        if (mRewardedAd != null) {
-                            Activity activityContext = MainActivity.this;
-                            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
-                                @Override
-                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                    // Handle the reward.
-                                    Log.d(TAG, "The user earned the reward.");
-                                    int rewardAmount = rewardItem.getAmount();
-                                    String rewardType = rewardItem.getType();
-                                }
-                            });
-                        } else {
-                            Log.d(TAG, "The rewarded ad wasn't ready yet.");
-                        }
-                        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                LoadData("");
-                                Log.d(TAG, "Ad was shown.");
-                            }
-
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                // Called when ad fails to show.
-                                Log.d(TAG, "Ad failed to show.");
-                            }
-
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                // Called when ad is dismissed.
-                                // Set the ad reference to null so you don't show the ad a second time.
-                                Log.d(TAG, "Ad was dismissed.");
-                                mRewardedAd = null;
-                            }
-                        });
-                    }
-                });
-    }
-    public void loadRewardedInterstitialAd(Bundle bundle){
-        RewardedInterstitialAd.load(MainActivity.this, "ca-app-pub-7773722896374259/8340809542",
-                new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(RewardedInterstitialAd ad) {
-                        Log.d(TAG, "Ad was loaded.");
-                        rewardedInterstitialAd = ad;
-                        rewardedInterstitialAd.show(/* Activity */ MainActivity.this,/*
-    OnUserEarnedRewardListener */ MainActivity.this);
-                        rewardedInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                            @Override
-                            public void onAdClicked() {
-                                super.onAdClicked();
-                            }
-
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                super.onAdDismissedFullScreenContent();
-                                onBackPressed();
-                                startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
-                            }
-
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                                super.onAdFailedToShowFullScreenContent(adError);
-                            }
-
-                            @Override
-                            public void onAdImpression() {
-                                super.onAdImpression();
-                            }
-
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                super.onAdShowedFullScreenContent();
-                            }
-                        });
-                    }
-                    @Override
-                    public void onAdFailedToLoad(LoadAdError loadAdError) {
-                        Log.d(TAG, loadAdError.toString());
-                        rewardedInterstitialAd = null;
-                        onBackPressed();
-                        startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
-                    }
-                });
-    }
-    void animation(View view) {
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-        double animationDuration = 0.2 * 10000;
-        myAnim.setDuration((long) animationDuration);
-        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.1, 20);
-        myAnim.setInterpolator(interpolator);
-        view.startAnimation(myAnim);
-        myAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                animation(view);
-            }
-        });
-    }
-    void show_dialog(int i, Bundle bundle, String ip_address){
-        final Dialog dialog2 = new Dialog(this);
-        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog2.setCancelable(false);
-        dialog2.setContentView(R.layout.dialog);
-        dialog2.show();
-        ImageView close_background = dialog2.findViewById(R.id.close_background);
-        TextView close_button = dialog2.findViewById(R.id.close_button);
-        runnable = new Runnable() {
-            public void run() {
-                close_background.setVisibility(View.VISIBLE);
-                close_button.setVisibility(View.VISIBLE);
-            }
-        };
-        handler.postDelayed(runnable, 1000);
-        TextView click_button = dialog2.findViewById(R.id.click_button);
-        close_button.setText(getString(R.string.drawer_close));
-        click_button.setText(getString(R.string.drawer_open));
-        animation(click_button);
-        close_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog2.dismiss();
-            }
-        });
-        click_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog2.dismiss();
-                dialog.show();
-                switch (i){
-//                    case 1: loadInterstitialAd(ip_address);
-                    case 1: LoadData(ip_address);
-//                    case 2: loadRewardedad();
-                    case 2: LoadData("");
-//                    case 3: loadRewardedInterstitialAd(bundle);
-                    case 3: startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
-                }
-            }
-        });
-
-
-    }
-    private AdView mAdView;
-    private Handler handler;
-    private Runnable runnableBannerAd,runnableNativeAd, runnable;
-    public void loadBannerAd(AdRequest adRequest){
-        mAdView.loadAd(adRequest);
-        runnableBannerAd = new Runnable() {
-            public void run() {
-//                Toast.makeText(getBaseContext(),"loadBannerAd",Toast.LENGTH_SHORT).show();
-                loadBannerAd(adRequest);
-            }
-        };
-        handler.postDelayed(runnableBannerAd, 10000);
-    }
-    public void loadNativeAd(AdLoader adLoader){
-        adLoader.loadAd(new AdRequest.Builder().build());
-        runnableNativeAd = new Runnable() {
-            public void run() {
-//                Toast.makeText(getBaseContext(),"loadNativeAd",Toast.LENGTH_SHORT).show();
-                loadNativeAd(adLoader);
-            }
-        };
-        handler.postDelayed(runnableNativeAd, 10000);
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        is_pause=false;
-        Log.e("onCreate","onCreate");
-        ChangeLanguage.setLocal(this,ChangeLanguage.getLangCode(this));
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        handler=new Handler();
-        dialog = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+        AppPrefs.migrateLegacyLanguage(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
-        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name));
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-            }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, LookupFragment.newInstance(null), TAG_LOOKUP)
+                    .commitNow();
+        }
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            showTab(item.getItemId());
+            return true;
         });
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        loadBannerAd(adRequest);
-        AdLoader adLoader = new AdLoader.Builder(this, "ca-app-pub-7773722896374259/5378732148")
-                .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-                    @Override
-                    public void onNativeAdLoaded(NativeAd nativeAd) {
-                        int color = Color.parseColor("#AE6118");
-                        NativeTemplateStyle styles = new
-                                NativeTemplateStyle.Builder().withMainBackgroundColor(new ColorDrawable(getResources().getColor(R.color.teal_200))).build();
-                        TemplateView template = findViewById(R.id.my_template);
-//                        template.setStyles(styles);
-                        template.setNativeAd(nativeAd);
-
-                    }
-                })
-                .withAdListener(new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(LoadAdError adError) {
-                        // Handle the failure by logging, altering the UI, and so on.
-                    }
-                })
-                .withNativeAdOptions(new NativeAdOptions.Builder()
-                        // Methods in the NativeAdOptions.Builder class can be
-                        // used here to specify individual options settings.
-                        .build())
-                .build();
-        loadNativeAd(adLoader);
-
-        _ip=findViewById(R.id._ip);
-        ip_lookup=findViewById(R.id.ip_lookup);
-        my_ip=findViewById(R.id.my_ip);
-        map=findViewById(R.id.map);
-        ip=findViewById(R.id.ip);
-        reason_tab=findViewById(R.id.reason_tab);
-        reason=findViewById(R.id.reason);
-        city_tab=findViewById(R.id.city_tab);
-        map_tab=findViewById(R.id.map_tab);
-        region_tab=findViewById(R.id.region_tab);
-        country_tab=findViewById(R.id.country_tab);
-        in_eu_tab=findViewById(R.id.in_eu_tab);
-        position_tab=findViewById(R.id.position_tab);
-        longitude_tab=findViewById(R.id.longitude_tab);
-        timezone_tab=findViewById(R.id.timezone_tab);
-        country_calling_code_tab=findViewById(R.id.country_calling_code_tab);
-        currency_tab=findViewById(R.id.currency_tab);
-        languages_tab=findViewById(R.id.languages_tab);
-        asn_tab=findViewById(R.id.asn_tab);
-        org_tab=findViewById(R.id.org_tab);
-        boolean status = NetworkUtil.getConnectivityStatusString(this);
-        if(!status){
-            startActivity(new Intent(this, NoInternetActivity.class));
-        }
-        else {
-            LoadData("");
-            ip_lookup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String ip2=_ip.getText().toString();
-                    if(isValid(ip2)){
-                        //show_dialog(1, null, ip2);
-                        //LoadData(ip2);
-                        loadInterstitialAd(ip2);
-                    }
-                    else {
-                        reason.setText(getString(R.string.invalid_ip));
-                        ip.setText(ip2);
-                        reason_tab.setVisibility(View.VISIBLE);
-                        city_tab.setVisibility(View.GONE);
-                        region_tab.setVisibility(View.GONE);
-                        country_tab.setVisibility(View.GONE);
-                        in_eu_tab.setVisibility(View.GONE);
-                        position_tab.setVisibility(View.GONE);
-                        map_tab.setVisibility(View.GONE);
-                        longitude_tab.setVisibility(View.GONE);
-                        timezone_tab.setVisibility(View.GONE);
-                        country_calling_code_tab.setVisibility(View.GONE);
-                        currency_tab.setVisibility(View.GONE);
-                        languages_tab.setVisibility(View.GONE);
-                        asn_tab.setVisibility(View.GONE);
-                        org_tab.setVisibility(View.GONE);
-                    }
-//                    Toast.makeText(MainActivity.this,ip2,Toast.LENGTH_LONG).show();
-                }
-            });
-            my_ip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //show_dialog(2, null, "");
-                    LoadData("");
-                }
-            });
-            map.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("latitude_text", latitude_text);
-                    bundle.putString("longitude_text", longitude_text);
-                    //show_dialog(3, bundle, "");
-                    startActivity(new Intent(MainActivity.this, MapsActivity.class).putExtras(bundle));
-                }
-            });
-        }
-    }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        dialog.dismiss();
-        handler.removeCallbacks(runnableBannerAd);
-        handler.removeCallbacks(runnableNativeAd);
+        binding.bottomNav.setOnItemReselectedListener(item -> { });
+        loadBanner();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if(is_pause){
-            handler.postDelayed(runnableBannerAd, 0);
-            handler.postDelayed(runnableNativeAd, 0);
-            Log.e("onResume","onResume");
+    protected void onDestroy() {
+        if (bannerView != null) bannerView.destroy();
+        super.onDestroy();
+    }
+
+    /** Switches to the lookup tab and searches for {@code query} (empty = own IP). */
+    public void openLookup(String query) {
+        binding.bottomNav.setSelectedItemId(R.id.nav_lookup);
+        LookupFragment lookup = (LookupFragment) getSupportFragmentManager().findFragmentByTag(TAG_LOOKUP);
+        if (lookup != null) lookup.lookup(query);
+    }
+
+    private void showTab(int itemId) {
+        FragmentManager fm = getSupportFragmentManager();
+        String tag;
+        if (itemId == R.id.nav_history) tag = TAG_HISTORY;
+        else if (itemId == R.id.nav_tools) tag = TAG_TOOLS;
+        else if (itemId == R.id.nav_device) tag = TAG_DEVICE;
+        else tag = TAG_LOOKUP;
+
+        FragmentTransaction tx = fm.beginTransaction().setReorderingAllowed(true);
+        for (Fragment f : fm.getFragments()) {
+            if (!tag.equals(f.getTag()) && !f.isHidden()) tx.hide(f);
+        }
+        Fragment target = fm.findFragmentByTag(tag);
+        if (target == null) {
+            tx.add(R.id.fragment_container, createFragment(tag), tag);
+        } else {
+            tx.show(target);
+        }
+        tx.commitNow();
+    }
+
+    private static Fragment createFragment(String tag) {
+        switch (tag) {
+            case TAG_HISTORY:
+                return new HistoryFragment();
+            case TAG_TOOLS:
+                return new ToolsFragment();
+            case TAG_DEVICE:
+                return new DeviceFragment();
+            default:
+                return LookupFragment.newInstance(null);
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        is_pause=true;
-        dialog.dismiss();
-        handler.removeCallbacks(runnableBannerAd);
-        handler.removeCallbacks(runnableNativeAd);
-        Log.e("onPause","onPause");
-    }
-    public void LoadData(String ip_address){
-        dialog.show();
-        Call<_Response> _response=null;
-        if(ip_address.equals("")){
-            _response = ApiClient.getInterface().GetMyIpData();
+    // Ads
+
+    private void loadBanner() {
+        if (AppPrefs.isAdFree(this)) {
+            binding.bannerContainer.setVisibility(View.GONE);
+            return;
         }
-        else {
-            _response = ApiClient.getInterface().GetCustomerIp(ip_address);
-        }
-        _response.enqueue(new Callback<_Response>() {
-            @Override
-            public void onResponse(Call<_Response> call, Response<_Response> response) {
-                if(response.isSuccessful()){
-//                    Log.e("code",response.code()+"");
-                    Log.e("response",response+"");
-
-
-                    ResponseList =response.body();
-                    ImageView country_flag = findViewById(R.id.country_flag);
-                    TextView city=findViewById(R.id.city) ;
-                    TextView region=findViewById(R.id.region);
-                    TextView region_code=findViewById(R.id.region_code);
-                    TextView country=findViewById(R.id.country);
-                    TextView country_code=findViewById(R.id.country_code);
-                    TextView country_code_iso3=findViewById(R.id.country_code_iso3);
-                    TextView country_name=findViewById(R.id.country_name);
-                    TextView country_capital=findViewById(R.id.country_capital);
-                    TextView country_tld=findViewById(R.id.country_tld);
-                    TextView country_area=findViewById(R.id.country_area);
-                    TextView country_population=findViewById(R.id.country_population);
-                    TextView continent_code=findViewById(R.id.continent_code);
-                    TextView in_eu=findViewById(R.id.in_eu);
-                    TextView postal=findViewById(R.id.postal);
-                    TextView latitude=findViewById(R.id.latitude);
-                    TextView longitude=findViewById(R.id.longitude);
-                    TextView latlong=findViewById(R.id.latlong);
-                    TextView timezone=findViewById(R.id.timezone);
-                    TextView utc_offset=findViewById(R.id.utc_offset);
-                    TextView country_calling_code=findViewById(R.id.country_calling_code);
-                    TextView currency=findViewById(R.id.currency);
-                    TextView currency_name=findViewById(R.id.currency_name);
-                    TextView languages=findViewById(R.id.languages);
-                    TextView asn=findViewById(R.id.asn);
-                    TextView org=findViewById(R.id.org);
-
-                    ip.setText(ResponseList.getIp());
-                    _ip.setText(ResponseList.getIp()) ;
-                    reason.setText(ResponseList.getReason());
-                    Log.e("getReason",ResponseList.getReason()+"");
-                    Log.e("reasongetText()",reason.getText()+"");
-
-                    if(ResponseList.getReason() != null){
-                        reason_tab.setVisibility(View.VISIBLE);
-                        city_tab.setVisibility(View.GONE);
-                        region_tab.setVisibility(View.GONE);
-                        country_tab.setVisibility(View.GONE);
-                        in_eu_tab.setVisibility(View.GONE);
-                        position_tab.setVisibility(View.GONE);
-                        map_tab.setVisibility(View.GONE);
-                        longitude_tab.setVisibility(View.GONE);
-                        timezone_tab.setVisibility(View.GONE);
-                        country_calling_code_tab.setVisibility(View.GONE);
-                        currency_tab.setVisibility(View.GONE);
-                        languages_tab.setVisibility(View.GONE);
-                        asn_tab.setVisibility(View.GONE);
-                        org_tab.setVisibility(View.GONE);
-                    }
-                    else {
-                        reason_tab.setVisibility(View.GONE);
-
-
-                        city_text=ResponseList.getCity();
-                        region_text=ResponseList.getRegion();
-                        region_code_text=ResponseList.getRegion_code();
-                        country_text=ResponseList.getCountry();
-                        country_code_text=ResponseList.getCountry_code();
-                        country_code_iso3_text=ResponseList.getCountry_code_iso3();
-                        country_name_text=ResponseList.getCountry_name();
-                        country_capital_text=ResponseList.getCountry_capital();
-                        country_tld_text=ResponseList.getCountry_tld();
-                        country_area_text=ResponseList.getCountry_area();
-                        country_population_text=ResponseList.getCountry_population();
-                        continent_code_text=ResponseList.getContinent_code();
-                        in_eu_text=ResponseList.getIn_eu();
-                        postal_text=ResponseList.getPostal();
-                        latitude_text=ResponseList.getLatitude();
-                        longitude_text=ResponseList.getLongitude();
-                        latlong_text=ResponseList.getLatlong();
-                        timezone_text=ResponseList.getTimezone();
-                        utc_offset_text=ResponseList.getUtc_offset();
-                        country_calling_code_text=ResponseList.getCountry_calling_code();
-                        currency_text=ResponseList.getCurrency();
-                        currency_name_text=ResponseList.getCurrency_name();
-                        languages_text=ResponseList.getLanguages();
-                        asn_text=ResponseList.getAsn();
-                        org_text=ResponseList.getOrg();
-                        if(city_text==null){
-                            city_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            city.setText(city_text);
-                            city_tab.setVisibility(View.VISIBLE);
-                        }
-                        if(region_text==null){
-                            region_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            region.setText(region_text);
-                            region_tab.setVisibility(View.VISIBLE);
-                        }
-                        if(region_code_text==null){
-
-                        }
-                        else {
-                            region_code.setText(region_code_text);
-
-
-                        }
-                        if(country_text==null){
-                            country_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            country.setText(country_text);
-                            country_tab.setVisibility(View.VISIBLE);
-                        }
-                        if(country_code_text==null){
-
-                        }
-                        else {
-                            country_code.setText(country_code_text);
-                        }
-                        if(country_code_iso3_text==null){
-
-                        }
-                        else {
-                            country_code_iso3.setText(country_code_iso3_text);
-                        }
-                        if(country_name_text==null){
-
-                        }
-                        else {
-                            country_name.setText(country_name_text);
-                        }
-                        if(country_capital_text==null){
-
-                        }
-                        else {
-                            country_capital.setText(country_capital_text);
-                        }
-                        if(country_tld_text==null){
-
-                        }
-                        else {
-                            country_tld.setText(country_tld_text);
-                        }
-                        if(country_area_text==null){
-
-                        }
-                        else {
-                            country_area.setText(country_area_text);
-                        }
-                        if(country_population_text==null){
-
-                        }
-                        else {
-                            country_population.setText(country_population_text);
-                        }
-                        if(continent_code_text==null){
-
-                        }
-                        else {
-                            continent_code.setText(continent_code_text);
-                        }
-                        if(in_eu_text==null){
-                            in_eu_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            in_eu_tab.setVisibility(View.VISIBLE);
-                            in_eu.setText(in_eu_text);
-                        }
-                        if(postal_text==null||postal_text.equals("Sign up to access")){
-
-                        }
-                        else {
-                            postal.setText(postal_text);
-                        }
-                        if(latitude_text==null||latitude_text.equals("Sign up to access")){
-                            position_tab.setVisibility(View.GONE);
-                            map_tab.setVisibility(View.GONE);
-
-                        }
-                        else {
-                            position_tab.setVisibility(View.VISIBLE);
-                            map_tab.setVisibility(View.VISIBLE);
-                            latitude.setText(latitude_text+" / "+longitude_text);
-                        }
-                        if(longitude_text==null||longitude_text.equals("Sign up to access")){
-                            longitude_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            longitude_tab.setVisibility(View.GONE);
-                            longitude.setText(longitude_text+"");
-                        }
-                        if(latlong_text==null){
-
-                        }
-                        else {
-                            latlong.setText(latlong_text);
-                        }
-                        if(timezone_text==null){
-                            timezone_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            timezone_tab.setVisibility(View.VISIBLE);
-                            timezone.setText(timezone_text+" ("+utc_offset_text+")");
-                        }
-                        if(utc_offset_text==null){
-
-                        }
-                        else {
-                            utc_offset.setText(utc_offset_text);
-                        }
-                        if(country_calling_code_text==null){
-                            country_calling_code_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            country_calling_code_tab.setVisibility(View.VISIBLE);
-                            country_calling_code.setText(country_calling_code_text);
-                        }
-                        if(currency_text==null){
-                            currency_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            currency_tab.setVisibility(View.VISIBLE);
-                            currency.setText(currency_text);
-                        }
-                        if(currency_name_text==null){
-
-                        }
-                        else {
-                            currency_name.setText(currency_name_text);
-                        }
-                        if(languages_text==null){
-                            languages_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            languages_tab.setVisibility(View.VISIBLE);
-                            languages.setText(languages_text);
-                        }
-                        if(asn_text==null){
-                            asn_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            asn_tab.setVisibility(View.VISIBLE);
-                            asn.setText(asn_text);
-                        }
-                        if(org_text==null){
-                            org_tab.setVisibility(View.GONE);
-                        }
-                        else {
-                            org_tab.setVisibility(View.VISIBLE);
-                            org.setText(org_text);
-                        }
-                        String country_flag_url = "https://ipapi.co/static/images/flags/"+ResponseList.getCountry_code().toLowerCase(Locale.ROOT)+".png";
-                        Glide.with(MainActivity.this).load(country_flag_url).into(country_flag);
-                        //Utils.fetchSvg(MainActivity.this, country_flag_url, country_flag);
-                    }
-                    dialog.dismiss();
-                }
-                else if (response.errorBody() != null) {
-                    // Get response errorBody
-                    String errorBody = response.errorBody().toString();
-                    Log.e("errorBody",errorBody);
-                    Toast.makeText(getBaseContext(),errorBody,Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
-                }
-                else {
-                    dialog.dismiss();
-                    String message="Xatolik yuz berdi. keyinroq yana urinib ko'rig";
-                    Toast.makeText(getBaseContext(),message,Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<_Response> call, Throwable t) {
-                dialog.dismiss();
-                startActivity(new Intent(MainActivity.this, ServerErrorActivity.class));
-
-            }
-        });
+        bannerView = new AdView(this);
+        bannerView.setAdUnitId(BANNER_ID);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int widthDp = (int) (metrics.widthPixels / metrics.density);
+        bannerView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, widthDp));
+        binding.bannerContainer.removeAllViews();
+        binding.bannerContainer.addView(bannerView);
+        binding.bannerContainer.setVisibility(View.VISIBLE);
+        // Refresh rate is controlled from the AdMob console, not from code.
+        bannerView.loadAd(new AdRequest.Builder().build());
     }
+
+    private void onAdFreeGranted() {
+        binding.bannerContainer.setVisibility(View.GONE);
+        if (bannerView != null) {
+            bannerView.destroy();
+            bannerView = null;
+        }
+        LookupFragment lookup = (LookupFragment) getSupportFragmentManager().findFragmentByTag(TAG_LOOKUP);
+        if (lookup != null) lookup.onAdFreeChanged();
+        Toast.makeText(this, R.string.remove_ads_thanks, Toast.LENGTH_LONG).show();
+    }
+
+    private void showRemoveAdsDialog() {
+        String message = AppPrefs.isAdFree(this)
+                ? getString(R.string.remove_ads_active, formatDateTime(AppPrefs.getAdFreeUntil(this)))
+                : getString(R.string.remove_ads_msg);
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.remove_ads_title)
+                .setMessage(message)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.remove_ads_watch, (d, w) ->
+                        AdsManager.showRewardedForAdFree(this, new AdsManager.RewardCallback() {
+                            @Override
+                            public void onRewarded() {
+                                onAdFreeGranted();
+                            }
+
+                            @Override
+                            public void onUnavailable() {
+                                Toast.makeText(MainActivity.this, R.string.remove_ads_unavailable, Toast.LENGTH_LONG).show();
+                            }
+                        }))
+                .show();
+    }
+
+    private String formatDateTime(long millis) {
+        Date date = new Date(millis);
+        return DateFormat.getMediumDateFormat(this).format(date) + " " + DateFormat.getTimeFormat(this).format(date);
+    }
+
+    // Menu
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        String language=ChangeLanguage.getLangCode(this);
+        return true;
+    }
 
-        MenuItem uzbek = menu.findItem(R.id.uzbek);
-        MenuItem english = menu.findItem(R.id.english);
-        MenuItem russian = menu.findItem(R.id.russian);
-        switch (language){
-            case "uz": uzbek.setVisible(false); break;
-            case "en": english.setVisible(false); break;
-            case "ru": russian.setVisible(false); break;
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.telegram) {
+            UiUtils.openUrl(this, "https://t.me/complexprogrammer");
+        } else if (id == R.id.remove_ads) {
+            showRemoveAdsDialog();
+        } else if (id == R.id.theme) {
+            showThemeDialog();
+        } else if (id == R.id.language) {
+            showLanguageDialog();
+        } else if (id == R.id.privacy) {
+            showPrivacyDialog();
+        } else if (id == R.id.about) {
+            showAboutDialog();
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.telegram:
-                try {
-                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/complexprogrammer"));
-                    startActivity(myIntent);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, "No application can handle this request."
-                            + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-                return true;
-            case R.id.about:
-                LayoutInflater factory = LayoutInflater.from(MainActivity.this);
-                final View aboutView = factory.inflate(R.layout.about, null);
-                if(NetworkUtil.getConnectivityStatusString(getBaseContext())){
-                    AdView mAdView = aboutView.findViewById(R.id.adView);
-                    AdRequest adRequest = new AdRequest.Builder()
-                            .build();
-                    mAdView.loadAd(adRequest);
-                }
-                TextView versionLabel = aboutView.findViewById(R.id.version_label);
-                String versionName = getAppVersionName(getApplicationContext());
-                versionLabel.setText(MainActivity.this.getString(R.string.version, versionName));
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setIcon(R.mipmap.ic_launcher)
-                        .setTitle(R.string.app_name)
-                        .setView(aboutView)
-                        .setCancelable(false)
-                        .setPositiveButton("OK", null);
-                AlertDialog alert = builder.create();
-                alert.show();
-                return true;
-            case R.id.uzbek:
-                ChangeLanguage.setLocal(this,"uz");
-                onBackPressed();
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            case R.id.english:
-                ChangeLanguage.setLocal(this,"en");
-                onBackPressed();
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            case R.id.russian:
-                ChangeLanguage.setLocal(this,"ru");
-                onBackPressed();
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+
+    private void showThemeDialog() {
+        int[] modes = {AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, AppCompatDelegate.MODE_NIGHT_NO,
+                AppCompatDelegate.MODE_NIGHT_YES};
+        String[] labels = {getString(R.string.theme_system), getString(R.string.theme_light), getString(R.string.theme_dark)};
+        int current = 0;
+        for (int i = 0; i < modes.length; i++) if (modes[i] == AppPrefs.getNightMode(this)) current = i;
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.menu_theme)
+                .setSingleChoiceItems(labels, current, (d, which) -> {
+                    d.dismiss();
+                    AppPrefs.setNightMode(this, modes[which]);
+                })
+                .show();
     }
+
+    private void showLanguageDialog() {
+        String[] tags = {"uz", "en", "ru"};
+        String[] labels = {getString(R.string.uzbek), getString(R.string.english), getString(R.string.russian)};
+        String language = AppPrefs.getLanguage();
+        if (language.isEmpty()) language = getResources().getConfiguration().locale.getLanguage();
+        int current = -1;
+        for (int i = 0; i < tags.length; i++) if (tags[i].equals(language)) current = i;
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.language)
+                .setSingleChoiceItems(labels, current, (d, which) -> {
+                    d.dismiss();
+                    AppPrefs.setLanguage(tags[which]);
+                })
+                .show();
+    }
+
+    private void showPrivacyDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.privacy_policy)
+                .setMessage(R.string.privacy_text)
+                .setNeutralButton(R.string.privacy_open_full, (d, w) -> UiUtils.openUrl(this, getString(R.string.privacy_url)))
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
+    private void showAboutDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.about, null);
+        ((TextView) view.findViewById(R.id.version_label)).setText(getString(R.string.version, getAppVersionName(this)));
+        new MaterialAlertDialogBuilder(this)
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle(R.string.app_name)
+                .setView(view)
+                .setNeutralButton(R.string.privacy_policy, (d, w) -> showPrivacyDialog())
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
     public static String getAppVersionName(Context context) {
         try {
-            return context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0).versionName;
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
+            return "";
         }
-    }
-
-
-    @Override
-    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-
     }
 }

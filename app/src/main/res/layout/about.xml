@@ -1,79 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="24dp">
 
         <TextView
             android:id="@+id/version_label"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/version"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceTitleMedium" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autoLink="all"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="@string/send_me_bugs" />
+            android:text="@string/send_me_bugs"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autoLink="all"
-            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:autoLink="web"
+            android:gravity="center"
             android:text="@string/site_url" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autoLink="all"
-            android:gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:autoLink="email"
+            android:gravity="center"
             android:text="@string/email" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="2dp"
-            android:autoLink="all"
-            android:gravity="center_horizontal"
+            android:layout_marginTop="12dp"
             android:text="@string/developer_label"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="6dp"
-            android:autoLink="all"
-            android:gravity="center_horizontal"
             android:text="@string/developer" />
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            ads:adSize="SMART_BANNER"
-            android:gravity="center_horizontal"
-            ads:adUnitId="ca-app-pub-7773722896374259/8849931038">
-        </com.google.android.gms.ads.AdView>
-    </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/about_data_sources"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+    </LinearLayout>
 </ScrollView>

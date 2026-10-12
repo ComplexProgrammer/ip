@@ -1,121 +1,105 @@
 package ip.complexprogrammer.uz;
 
-import androidx.fragment.app.FragmentActivity;
-
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.color.MaterialColors;
 
 import ip.complexprogrammer.uz.databinding.ActivityMapsBinding;
-import ip.complexprogrammer.uz.services.ChangeLanguage;
+import ip.complexprogrammer.uz.services.ValueFormatter;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    Spinner dropdown;
-    Button back;
-    private GoogleMap mMap;
+/**
+ * Shows the approximate area of an IP address. IP geolocation is city-level at best,
+ * so we draw a radius instead of pretending to know the street.
+ */
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+    public static final String EXTRA_LAT = "lat";
+    public static final String EXTRA_LON = "lon";
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_IP = "ip";
+    private static final double ACCURACY_RADIUS_M = 10_000;
+    private static final float ZOOM = 10f;
+
     private ActivityMapsBinding binding;
-    private String latitude,longitude;
+    private GoogleMap map;
+    private double latitude;
+    private double longitude;
+    private String title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ChangeLanguage.setLocal(getBaseContext(),ChangeLanguage.getLangCode(getBaseContext()));
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Bundle bundle = getIntent().getExtras();
-        if (bundle!= null) {
-            latitude = bundle.getString("latitude_text");
-            longitude = bundle.getString("longitude_text");
-        }
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        back=findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        dropdown = findViewById(R.id.spinner1);
-        String[] items = new String[]{"HYBRID", "NORMAL", "SATELLITE","TERRAIN"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (!getIntent().hasExtra(EXTRA_LAT) || !getIntent().hasExtra(EXTRA_LON)) {
+            finish();
+            return;
+        }
+        latitude = getIntent().getDoubleExtra(EXTRA_LAT, 0);
+        longitude = getIntent().getDoubleExtra(EXTRA_LON, 0);
+        title = getIntent().getStringExtra(EXTRA_TITLE);
+        String ip = getIntent().getStringExtra(EXTRA_IP);
+
+        binding.place.setText(title == null || title.isEmpty() ? ip : title);
+        binding.coords.setText(ip + "  ·  " + ValueFormatter.coordinates(latitude, longitude));
+        binding.back.setOnClickListener(v -> finish());
+        binding.mapTypes.setOnCheckedStateChangeListener((group, checkedIds) -> applyMapType());
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) mapFragment.getMapAsync(this);
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(MapsActivity.this, MainActivity.class));
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        int bottomPadding = (int) (140 * getResources().getDisplayMetrics().density);
+        int topPadding = (int) (72 * getResources().getDisplayMetrics().density);
+        map.setPadding(0, topPadding, 0, bottomPadding);
+        applyMapType();
+
+        LatLng position = new LatLng(latitude, longitude);
+        int primary = MaterialColors.getColor(binding.getRoot(), com.google.android.material.R.attr.colorPrimary, Color.BLUE);
+        map.addCircle(new CircleOptions()
+                .center(position)
+                .radius(ACCURACY_RADIUS_M)
+                .strokeWidth(3f)
+                .strokeColor(primary)
+                .fillColor(ColorUtils.setAlphaComponent(primary, 50)));
+        map.addMarker(new MarkerOptions()
+                .position(position)
+                .title(title)
+                .snippet(getString(R.string.map_approx_title)));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM));
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String value=adapterView.getItemAtPosition(i).toString();
-//                Toast.makeText(getApplicationContext(), "This is " +
-//                        adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
-                Log.e("",value);
-                switch (value) {
-                    case "HYBRID":        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);break;
-                    case "NORMAL":        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);break;
-                    case "SATELLITE":        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);break;
-                    case "TERRAIN":        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);break;
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-//        LatLng sydney = new LatLng(-33.88,151.21);
-        LatLng sydney = new LatLng(Float.parseFloat(latitude), Float.parseFloat(longitude));
-
-
-
-// Move the camera instantly to Sydney with a zoom of 15.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-
-// Zoom in, animating the camera.
-        mMap.animateCamera(CameraUpdateFactory.zoomIn());
-
-// Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    private void applyMapType() {
+        if (map == null) return;
+        int checked = binding.mapTypes.getCheckedChipId();
+        if (checked == R.id.type_hybrid) map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        else if (checked == R.id.type_satellite) map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        else if (checked == R.id.type_terrain) map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        else map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+        if (night && checked == R.id.type_normal) {
+            map.setMapStyle(com.google.android.gms.maps.model.MapStyleOptions.loadRawResourceStyle(this, R.raw.map_night));
+        } else {
+            map.setMapStyle(null);
+        }
     }
 }

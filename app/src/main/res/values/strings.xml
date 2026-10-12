@@ -1,57 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">IP Finder</string>
-    <string name="no_internet_is_available">No internet is available</string>>
-    <string name="uzbek">O\'zbek</string>
-    <string name="uzbekc">Ўзбек</string>
-    <string name="english">English</string>
-    <string name="russian">Русский</string>
-    <string name="splash_title">Complex Programmer</string>
-    <string name="splash_subtitle">complexprogrammer.uz</string>
+    <string name="loading">Loading…</string>
+
+    <!-- Navigation -->
+    <string name="nav_lookup">Lookup</string>
+    <string name="nav_history">History</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_device">Device</string>
+
+    <!-- Lookup -->
+    <string name="hint_ip_or_domain">IP address or domain</string>
+    <string name="helper_ip_or_domain">IPv4, IPv6 or a domain such as google.com</string>
+    <string name="lookup">Look up</string>
+    <string name="my_ip">My IP</string>
+    <string name="paste">Paste</string>
+    <string name="clear">Clear</string>
+    <string name="input_invalid">Enter a valid IPv4, IPv6 address or domain name</string>
+    <string name="data_disclosure">The address you enter is sent to ipapi.co (backup: ipwho.is) to find its location.</string>
+    <string name="resolved_from">%1$s → %2$s</string>
+    <string name="section_network">Network</string>
+    <string name="section_location">Location</string>
+    <string name="section_country">Country</string>
+    <string name="section_details">More details</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <string name="label_ip">IP address</string>
+    <string name="label_ip_version">Version</string>
+    <string name="label_asn">ASN</string>
+    <string name="label_org">Provider</string>
+    <string name="label_city">City</string>
+    <string name="label_region">Region</string>
+    <string name="label_postal">Postal code</string>
+    <string name="label_coordinates">Coordinates</string>
+    <string name="label_country">Country</string>
+    <string name="label_capital">Capital</string>
+    <string name="label_calling_code">Calling code</string>
+    <string name="label_currency">Currency</string>
+    <string name="label_languages">Languages</string>
+    <string name="label_timezone">Time zone</string>
+    <string name="label_local_time">Local time</string>
+    <string name="label_in_eu">European Union</string>
+    <string name="label_region_code">Region code</string>
+    <string name="label_iso3">ISO code</string>
+    <string name="label_tld">Domain zone</string>
+    <string name="label_area">Area</string>
+    <string name="label_population">Population</string>
+    <string name="label_continent">Continent</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="action_map">Map</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_share">Share</string>
+    <string name="action_favorite_add">Add to favorites</string>
+    <string name="action_favorite_remove">Remove from favorites</string>
+    <string name="favorite_added">Added to favorites</string>
+    <string name="favorite_removed">Removed from favorites</string>
+    <string name="copied">Copied: %s</string>
+    <string name="copied_all">All details copied</string>
+    <string name="long_press_to_copy">Long-press any value to copy it</string>
+    <string name="share_title">Share IP details</string>
+    <string name="approx_location_note">Location is approximate: usually the provider\'s or the city\'s location, not a street address.</string>
+    <string name="vpn_active">VPN is on</string>
+    <string name="vpn_inactive">VPN is off</string>
+    <string name="ip_changed">Your IP changed: %1$s → %2$s</string>
+    <string name="data_source">Source: %s</string>
+
+    <!-- Errors -->
+    <string name="error_no_internet_title">No internet connection</string>
+    <string name="error_no_internet_msg">Check Wi-Fi or mobile data and try again.</string>
+    <string name="error_server_title">Service is not responding</string>
+    <string name="error_server_msg">Couldn\'t get the data. Please try again in a moment.</string>
+    <string name="error_rate_limited_msg">The free lookup limit has been reached for now. Please try again later.</string>
+    <string name="error_reserved_title">Private address</string>
+    <string name="error_reserved_msg">%s is a private or reserved address (home network, loopback, etc.). Such addresses have no public location.</string>
+    <string name="error_unknown_host_title">Domain not found</string>
+    <string name="error_unknown_host_msg">Couldn\'t find an IP address for %s. Check the spelling.</string>
+    <string name="retry">Try again</string>
+
+    <!-- History -->
+    <string name="history_empty">No lookups yet.\nAddresses you look up will appear here.</string>
+    <string name="history_clear">Clear history</string>
+    <string name="history_clear_confirm">Delete all recent lookups? Favorites are kept.</string>
+    <string name="history_favorites">Favorites</string>
+    <string name="history_recent">Recent</string>
+    <string name="history_removed">Removed from history</string>
+    <string name="undo">Undo</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Tools -->
+    <string name="tools_host_hint">Host or IP</string>
+    <string name="tool_ping">Ping</string>
+    <string name="tool_dns">DNS</string>
+    <string name="tool_whois">WHOIS</string>
+    <string name="tool_ports">Ports</string>
+    <string name="tool_run">Run</string>
+    <string name="tool_stop">Stop</string>
+    <string name="tool_ping_desc">Checks whether the host answers and how fast (4 packets).</string>
+    <string name="tool_dns_desc">Shows the IPv4/IPv6 addresses a domain points to.</string>
+    <string name="tool_whois_desc">Shows who owns a domain or an IP range.</string>
+    <string name="tool_ports_desc">Checks %d common ports (web, mail, SSH, VPN…).</string>
+    <string name="tool_host_required">Enter a host or IP address</string>
+    <string name="tool_error">Error: %s</string>
+    <string name="tool_stopped">Stopped</string>
+    <string name="tool_output_empty">Results will appear here</string>
+    <string name="port_open">open</string>
+    <string name="ports_summary">%1$d of %2$d common ports are open</string>
+    <string name="tool_copy_output">Copy result</string>
+
+    <!-- Device -->
+    <string name="device_public_ip">Public IP</string>
+    <string name="device_check_public">Check public IP</string>
+    <string name="device_connection">Connection</string>
+    <string name="device_vpn">VPN</string>
+    <string name="device_interface">Interface</string>
+    <string name="device_local_ip">Local IP</string>
+    <string name="device_gateway">Gateway</string>
+    <string name="device_dns">DNS servers</string>
+    <string name="device_private_dns">Private DNS</string>
+    <string name="device_refresh">Refresh</string>
+    <string name="device_unknown">Unknown</string>
+    <string name="transport_wifi">Wi-Fi</string>
+    <string name="transport_cellular">Mobile data</string>
+    <string name="transport_ethernet">Ethernet</string>
+    <string name="transport_vpn">VPN</string>
+    <string name="transport_other">Other</string>
+    <string name="transport_none">Not connected</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+
+    <!-- Menu -->
+    <string name="menu_remove_ads">Remove ads for 24 h</string>
+    <string name="menu_theme">Theme</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
     <string name="language">Language</string>
     <string name="about">About</string>
-    <string name="telegram">Telegram</string>>
-    <string name="current_time">current time</string>
-    <string name="sum">sum</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="telegram">Telegram</string>
+    <string name="uzbek">O\'zbekcha</string>
+    <string name="english">English</string>
+    <string name="russian">Русский</string>
+    <string name="no_browser">No app can open this link</string>
+
+    <!-- Ad-free -->
+    <string name="remove_ads_title">Use the app without ads</string>
+    <string name="remove_ads_msg">Watch one short video and all ads will be turned off for 24 hours.</string>
+    <string name="remove_ads_watch">Watch video</string>
+    <string name="remove_ads_active">Ads are off until %s. Watch another video to add 24 more hours.</string>
+    <string name="remove_ads_thanks">Thank you! Ads are off for 24 hours.</string>
+    <string name="remove_ads_unavailable">No video is available right now. Please try later.</string>
+
+    <!-- About / privacy -->
     <string name="version">Version %s</string>
     <string name="send_me_bugs">If you run into a bug, don\'t hesitate to contact me by e-mail.</string>
     <string name="site_url">www.complexprogrammer.uz</string>
     <string name="email">complexprogrammer@mail.ru</string>
     <string name="developer_label">Developer</string>
     <string name="developer">Odiljon Gaybullaev</string>
-    <string name="back">back</string>
-    <string name="server_error">An error occurred on the server. Please try again later.</string>
-    <string name="ip">IP Address</string>
-    <string name="city">City</string>
-    <string name="region">Region</string>
-    <string name="country">Country</string>
-    <string name="in_eu">European Union</string>
-    <string name="country_calling_code">Calling Code</string>
-    <string name="currency">Currency</string>
-    <string name="languages">Languages</string>
-    <string name="asn">ASN</string>
-    <string name="org">Org</string>
-    <string name="ip_lookup">IP Lookup</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
-    <string name="timezone">Time Zone</string>
-    <string name="position">Latitude / Longitude</string>
-    <string name="my_ip">My IP</string>
-    <string name="region_code">region_code</string>
-    <string name="country_code">country_code</string>
-    <string name="country_code_iso3">country_code_iso3</string>
-    <string name="country_name">country_name</string>
-    <string name="country_capital">country_capital</string>
-    <string name="country_tld">country_tld</string>
-    <string name="country_area">country_area</string>
-    <string name="country_population">country_population</string>
-    <string name="continent_code">continent_code</string>
-    <string name="postal">postal</string>
-    <string name="latlong">latlong</string>
-    <string name="utc_offset">utc_offset</string>
-    <string name="currency_name">currency_name</string>
-    <string name="title_activity_maps">MapsActivity</string>
-    <string name="map">Map</string>
-    <string name="invalid_ip">Invalid IP</string>
-    <string name="drawer_open">Open</string>
-    <string name="drawer_close">Close</string>
+    <string name="about_data_sources">Location data: ipapi.co, ipwho.is. Maps: Google Maps.</string>
+    <string name="privacy_url" translatable="false">https://github.com/ComplexProgrammer/ip/blob/master/PRIVACY_POLICY.md</string>
+    <string name="privacy_text">• The app has no account and does not collect your name, contacts or files.\n\n• IP addresses and domains you look up are sent to ipapi.co, or to ipwho.is if the first service fails, only to get their location data.\n\n• Lookup history and settings are stored only on your device. You can clear the history at any time.\n\n• Ads are served by Google AdMob, which may use the advertising ID. Crash reports and anonymous usage statistics are collected by Firebase to fix bugs.\n\n• Network tools (ping, DNS, WHOIS, ports) connect directly from your device to the host you enter.</string>
+    <string name="privacy_open_full">Full policy</string>
+    <string name="ok">OK</string>
+
+    <!-- Map -->
+    <string name="map_type_normal">Map</string>
+    <string name="map_type_hybrid">Hybrid</string>
+    <string name="map_type_satellite">Satellite</string>
+    <string name="map_type_terrain">Terrain</string>
+    <string name="map_approx_title">Approximate location</string>
+    <string name="map_approx_msg">The circle shows the likely area. IP addresses can\'t reveal an exact street address.</string>
+    <string name="back">Back</string>
+
+    <!-- Widget -->
+    <string name="widget_description">Shows your public IP address</string>
+    <string name="widget_title">My IP</string>
+    <string name="widget_tap_to_refresh">Tap to refresh</string>
+    <string name="widget_updated">Updated %s</string>
+    <string name="widget_error">No connection</string>
 </resources>
