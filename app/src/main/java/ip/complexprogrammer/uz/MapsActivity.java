@@ -3,10 +3,15 @@ package ip.complexprogrammer.uz;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,12 +42,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double latitude;
     private double longitude;
     private String title;
+    private Insets systemBars = Insets.NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        applyEdgeToEdge();
 
         if (!getIntent().hasExtra(EXTRA_LAT) || !getIntent().hasExtra(EXTRA_LON)) {
             finish();
@@ -67,9 +74,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         map = googleMap;
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
-        int bottomPadding = (int) (140 * getResources().getDisplayMetrics().density);
-        int topPadding = (int) (72 * getResources().getDisplayMetrics().density);
-        map.setPadding(0, topPadding, 0, bottomPadding);
+        updateMapPadding();
         applyMapType();
 
         LatLng position = new LatLng(latitude, longitude);
@@ -85,6 +90,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title(title)
                 .snippet(getString(R.string.map_approx_title)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM));
+    }
+
+    /** The map fills the screen behind the system bars; the overlays and map controls stay clear of them. */
+    private void applyEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        int topBarPadding = binding.topBar.getPaddingTop();
+        ViewGroup.MarginLayoutParams cardParams = (ViewGroup.MarginLayoutParams) binding.infoCard.getLayoutParams();
+        int cardMarginBottom = cardParams.bottomMargin;
+        int cardMarginStart = cardParams.getMarginStart();
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            binding.topBar.setPadding(topBarPadding + systemBars.left, topBarPadding + systemBars.top,
+                    topBarPadding + systemBars.right, topBarPadding);
+            cardParams.bottomMargin = cardMarginBottom + systemBars.bottom;
+            cardParams.setMarginStart(cardMarginStart + systemBars.left);
+            binding.infoCard.setLayoutParams(cardParams);
+            updateMapPadding();
+            return insets;
+        });
+    }
+
+    private void updateMapPadding() {
+        if (map == null) return;
+        float density = getResources().getDisplayMetrics().density;
+        map.setPadding(systemBars.left, (int) (72 * density) + systemBars.top,
+                systemBars.right, (int) (140 * density) + systemBars.bottom);
     }
 
     private void applyMapType() {

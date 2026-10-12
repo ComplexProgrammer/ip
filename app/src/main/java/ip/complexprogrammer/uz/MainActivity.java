@@ -15,7 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+        applyEdgeToEdge();
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -66,6 +71,20 @@ public class MainActivity extends AppCompatActivity {
         });
         binding.bottomNav.setOnItemReselectedListener(item -> { });
         loadBanner();
+    }
+
+    /**
+     * Android 15+ always draws apps edge-to-edge, so do it on every version and pad the content
+     * away from the system bars. BottomNavigationView pads itself for the navigation bar.
+     */
+    private void applyEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+            v.setPadding(bars.left, bars.top, bars.right, Math.max(0, ime.bottom - bars.bottom));
+            return insets;
+        });
     }
 
     @Override

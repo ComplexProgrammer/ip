@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Readable crash stack traces in Crashlytics / Play Console (mapping.txt is bundled into the AAB).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# Gson maps JSON onto these fields by name.
+-keep class ip.complexprogrammer.uz.models.** { *; }
+
+# Retrofit reads the generic return types and annotations of the API interface at runtime.
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+-keep interface ip.complexprogrammer.uz.services.ApiInterface { *; }
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
