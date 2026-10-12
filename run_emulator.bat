@@ -1,0 +1,3 @@
+@echo off
+echo Ish stolidagi emulyator oynasi ochilmoqda...
+start "" "%LOCALAPPDATA%\Android\Sdk\emulator\emulator.exe" -avd Medium_Phone_API_36.1
