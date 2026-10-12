@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "ip.complexprogrammer.uz"
-        minSdk 21
+        minSdk 24
         targetSdk 36
         versionCode 17
         versionName "1.3.2"
