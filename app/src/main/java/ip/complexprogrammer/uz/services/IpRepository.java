@@ -44,9 +44,9 @@ public class IpRepository {
         return EXECUTOR.submit(() -> {
             try {
                 IpInfo info = lookupBlocking(rawQuery);
-                main.post(() -> callback.onSuccess(info));
+                if (!Thread.currentThread().isInterrupted()) main.post(() -> callback.onSuccess(info));
             } catch (LookupException e) {
-                main.post(() -> callback.onError(e.type, e.getMessage()));
+                if (!Thread.currentThread().isInterrupted()) main.post(() -> callback.onError(e.type, e.getMessage()));
             }
         });
     }
@@ -83,7 +83,7 @@ public class IpRepository {
             IpInfo info = fromIpApi(ip);
             return finish(info, host);
         } catch (LookupException e) {
-            if (e.type == ErrorType.RESERVED) throw e;
+            if (e.type == ErrorType.RESERVED || Thread.currentThread().isInterrupted()) throw e;
             firstError = e;
         }
         try {

@@ -94,8 +94,12 @@ public class NetworkUtil {
             LinkProperties lp = cm.getLinkProperties(cm.getActiveNetwork());
             if (lp != null) {
                 result.interfaceName = lp.getInterfaceName();
+                // IPv4 first: that is the address people look for on a home network.
                 for (LinkAddress la : lp.getLinkAddresses()) {
-                    result.addresses.add(la.getAddress().getHostAddress() + "/" + la.getPrefixLength());
+                    if (la.getAddress() instanceof Inet4Address) result.addresses.add(la.getAddress().getHostAddress());
+                }
+                for (LinkAddress la : lp.getLinkAddresses()) {
+                    if (!(la.getAddress() instanceof Inet4Address)) result.addresses.add(la.getAddress().getHostAddress());
                 }
                 for (RouteInfo route : lp.getRoutes()) {
                     InetAddress gw = route.getGateway();

@@ -115,7 +115,9 @@
                         android:minHeight="120dp"
                         android:padding="16dp"
                         android:text="@string/tool_output_empty"
+                        android:fontFamily="monospace"
                         android:textAppearance="@style/TextAppearance.Ip.Mono"
+                        android:typeface="monospace"
                         android:textIsSelectable="true" />
                 </HorizontalScrollView>
 

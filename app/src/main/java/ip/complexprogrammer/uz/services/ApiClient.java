@@ -18,6 +18,8 @@ public class ApiClient {
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
+                    // Bounds the whole call, including DNS, so a dead network fails fast to the fallback API.
+                    .callTimeout(8, TimeUnit.SECONDS)
                     // ipapi.co's Cloudflare front rejects the default "okhttp/x" user agent with 403.
                     .addInterceptor(chain -> chain.proceed(chain.request().newBuilder()
                             .header("User-Agent", "IPFinder/" + BuildConfig.VERSION_NAME + " (Android)")
